@@ -27,6 +27,9 @@
 # Icon must end with two \r
 **/Icon
 
+obj/
+.vs
+.vs/
 
 # Thumbnails
 **/._*
