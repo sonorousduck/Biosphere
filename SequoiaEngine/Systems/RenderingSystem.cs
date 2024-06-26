@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SequoiaEngine.Utilities;
-using SequoiaEngine;
-using System;
-using System.Diagnostics.Metrics;
 
 namespace SequoiaEngine
 {
