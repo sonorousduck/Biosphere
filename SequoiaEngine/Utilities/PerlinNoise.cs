@@ -83,25 +83,25 @@ the accompanying demo.
 
             double vx0 = Lattice(ix, iy, iz, fx0, fy0, fz0);
             double vx1 = Lattice(ix + 1, iy, iz, fx1, fy0, fz0);
-            double vy0 = CrowMath.Lerp(wx, vx0, vx1);
+            double vy0 = SequoiaMath.Lerp(wx, vx0, vx1);
 
             vx0 = Lattice(ix, iy + 1, iz, fx0, fy1, fz0);
             vx1 = Lattice(ix + 1, iy + 1, iz, fx1, fy1, fz0);
-            double vy1 = CrowMath.Lerp(wx, vx0, vx1);
+            double vy1 = SequoiaMath.Lerp(wx, vx0, vx1);
 
-            double vz0 = CrowMath.Lerp(wy, vy0, vy1);
+            double vz0 = SequoiaMath.Lerp(wy, vy0, vy1);
 
             vx0 = Lattice(ix, iy, iz + 1, fx0, fy0, fz1);
             vx1 = Lattice(ix + 1, iy, iz + 1, fx1, fy0, fz1);
-            vy0 = CrowMath.Lerp(wx, vx0, vx1);
+            vy0 = SequoiaMath.Lerp(wx, vx0, vx1);
 
             vx0 = Lattice(ix, iy + 1, iz + 1, fx0, fy1, fz1);
             vx1 = Lattice(ix + 1, iy + 1, iz + 1, fx1, fy1, fz1);
-            vy1 = CrowMath.Lerp(wx, vx0, vx1);
+            vy1 = SequoiaMath.Lerp(wx, vx0, vx1);
 
-            double vz1 = CrowMath.Lerp(wy, vy0, vy1);
-            return CrowMath.Lerp(wz, vz0, vz1);
-        }
+            double vz1 = SequoiaMath.Lerp(wy, vy0, vy1);
+            return SequoiaMath.Lerp(wz, vz0, vz1);
+        }   
 
         private void InitGradients()
         {
