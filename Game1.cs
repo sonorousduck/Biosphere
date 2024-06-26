@@ -21,6 +21,8 @@ namespace Biosphere
             // TODO: Add your initialization logic here
 
             base.Initialize();
+
+            Window.AllowUserResizing = true;
         }
 
         protected override void LoadContent()

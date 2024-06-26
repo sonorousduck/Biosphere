@@ -1,0 +1,3 @@
+[submodule "Sequoia/ThirdParty/Nez"]
+	path = Sequoia/ThirdParty/Nez
+	url = git@github.com:prime31/Nez.git
