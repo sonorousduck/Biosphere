@@ -5,27 +5,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SequoiaEngine
 {
-    public enum ScreenEnum
-    {
-        Default,
-        Game,
-        MainMenu,
-        Controls,
-        Credits,
-        PauseScreen,
-        Quit,
-        CameraTest,
-        Test
-    }
+
 
     /// <summary>
     /// A representative of a screen. Add the names of your screens to this, in the enum. When you want to add a gameObject to this screen, you should call systemManager.Add(gameObject).
     /// </summary>
-    public abstract partial class  Screen
+    public abstract partial class Screen
     {
         protected SystemManager systemManager;
-        protected ScreenEnum screenName;
-        protected ScreenEnum currentScreen;
+
 
         protected GraphicsDeviceManager graphics;
         protected SpriteBatch spriteBatch;
@@ -33,11 +21,6 @@ namespace SequoiaEngine
         protected GameWindow window;
         protected ContentManager content;
 
-        public Screen(ScreenEnum screenEnum)
-        {
-            this.screenName = screenEnum;
-            this.currentScreen = screenEnum;
-        }
 
         /// <summary>
         /// This MUST be invoked with a base() call.
@@ -61,15 +44,10 @@ namespace SequoiaEngine
         /// Updates all registered systems. You shouldn't need to modify this
         /// </summary>
         /// <param name="gameTime"></param>
-        public ScreenEnum Update(GameTime gameTime)
-        {
-            systemManager.Update(gameTime);
-
-            return currentScreen;
-        }
+        
 
 
-        public abstract void Draw(GameTime gameTime);
+        //public abstract void Draw(GameTime gameTime);
 
         /// <summary>
         /// Function that is called the first frame this screen is switched to. Useful for loading and such
@@ -86,11 +64,6 @@ namespace SequoiaEngine
         /// </summary>
         public abstract void SetupGameObjects();
 
-        protected void SetCurrentScreen(ScreenEnum screenEnum)
-        {
-            currentScreen = screenEnum;
-        }
 
-        public delegate void SetCurrentScreenDelegate(ScreenEnum screenEnum);
     }
 }

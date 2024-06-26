@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Screens;
+using SequoiaEngine;
+using System.Collections.Generic;
 
 
 namespace Biosphere
@@ -9,10 +12,24 @@ namespace Biosphere
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private readonly ScreenManager screenManager;
 
+
+        private Dictionary<ScreenEnum, SequoiaEngine.Screen> screens;
+        private SequoiaEngine.Screen currentScreen;
+        private ScreenEnum nextScreen;
+        private bool newScreenFocused;
+        const int VIRTUAL_WIDTH = 480;
+        const int VIRTUAL_HEIGHT = 270; // Aspect ratio of 16:9
+        
+        
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
+            screenManager = new ScreenManager();
+            Components.Add(screenManager);
+
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -47,7 +64,9 @@ namespace Biosphere
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            currentScreen.Draw(gameTime);
+
+            currentScreen = screens[nextScreen];
 
             base.Draw(gameTime);
         }
