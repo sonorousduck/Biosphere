@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CrowEngine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
@@ -28,6 +29,7 @@ namespace Biosphere
             _graphics = new GraphicsDeviceManager(this);
             screenManager = new ScreenManager();
             Components.Add(screenManager);
+            screens = new();
 
 
             Content.RootDirectory = "Content";
@@ -38,22 +40,59 @@ namespace Biosphere
         {
             // TODO: Add your initialization logic here
 
-            base.Initialize();
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.ApplyChanges();
 
             Window.AllowUserResizing = true;
+
+            screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
+            currentScreen = screens[ScreenEnum.Test];
+            nextScreen = ScreenEnum.Test;
+
+
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            foreach (ScreenEnum screen in screens.Keys)
+            {
+                screens[screen].Initialize(GraphicsDevice, _graphics, Window);
+            }
+
+            foreach (ScreenEnum screen in screens.Keys)
+            {
+                screens[screen].LoadContent();
+                screens[screen].SetupGameObjects();
+            }
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            // Diplays FPS
+            /*            Debug.WriteLine(1 / gameTime.ElapsedGameTime.TotalSeconds);
+            */
+
+            if (newScreenFocused)
+            {
+                currentScreen.OnScreenFocus();
+                newScreenFocused = false;
+            }
+
+            currentScreen.Update(gameTime);
+
+            if (screens[nextScreen] != currentScreen)
+            {
+                currentScreen.OnScreenDefocus();
+                newScreenFocused = true;
+            }
 
             // TODO: Add your update logic here
 

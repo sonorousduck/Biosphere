@@ -26,8 +26,8 @@ namespace SequoiaEngine
             centerOfScreen = screenSize / 2;
             systemManager.UpdateSystem -= Update; // remove the automatically added update
 
-            ResourceManager.Load<Texture2D>("Images/circle", "circle");
-            ResourceManager.Load<Texture2D>("Images/box", "box");
+            //ResourceManager.Load<Texture2D>("Images/circle", "circle");
+            //ResourceManager.Load<Texture2D>("Images/box", "box");
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

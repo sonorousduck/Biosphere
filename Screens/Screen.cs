@@ -30,12 +30,10 @@ namespace SequoiaEngine
             this.currentScreen = screenEnum;
         }
 
-/*        public ScreenEnum Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             systemManager.Update(gameTime);
-
-            return currentScreen;
-        }*/
+        }
 
         protected void SetCurrentScreen(ScreenEnum screenEnum)
         {

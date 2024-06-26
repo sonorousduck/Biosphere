@@ -17,8 +17,8 @@ namespace SequoiaEngine
 
         public Particle(Texture2D texture, ParticleEffect effect)
         {
+            this.Texture = texture;
             this.Effect = effect;
-
         }
 
     }

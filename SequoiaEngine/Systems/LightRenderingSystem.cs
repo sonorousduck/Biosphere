@@ -28,13 +28,13 @@ namespace SequoiaEngine
         public LightRenderingSystem(SystemManager systemManager, GameObject camera, GraphicsDevice graphicsDevice) : base(systemManager, typeof(Transform), typeof(Light))
         {
             systemManager.UpdateSystem -= Update;
-            ResourceManager.Load<Texture2D>("Images/light", "light");
-            ResourceManager.Load<Texture2D>("Images/black", "black");
-            ResourceManager.Load<Texture2D>("Images/white", "white");
+            //ResourceManager.Load<Texture2D>("Images/light", "light");
+            //ResourceManager.Load<Texture2D>("Images/black", "black");
+            //ResourceManager.Load<Texture2D>("Images/white", "white");
 
-            blackBackground = ResourceManager.Get<Texture2D>("black");
-            lightTexture = ResourceManager.Get<Texture2D>("light");
-            whiteBackground = ResourceManager.Get<Texture2D>("white");
+            //blackBackground = ResourceManager.Get<Texture2D>("black");
+            //lightTexture = ResourceManager.Get<Texture2D>("light");
+            //whiteBackground = ResourceManager.Get<Texture2D>("white");
             this.spriteBatch = new SpriteBatch(graphicsDevice);
             this.graphicsDevice = graphicsDevice;
 
