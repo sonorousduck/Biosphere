@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 
@@ -20,7 +21,61 @@ namespace SequoiaEngine
     }
     public class MouseInput : Input
     {
-        public Vector2 position;
+        public float RelativeX = 0;
+        public float RelativeY = 0;
+        
+        public float PositionX = 0;
+        public float PositionY = 0;
+        public float PreviousX = 0;
+        public float PreviousY = 0;
+
+        public Vector2 Position = new();
+        public Vector2 PreviousPosition = new();
+        public Vector2 RelativePosition = new();
+
+        public int ScrollPosition = 0;
+
+        public Dictionary<MouseButton, string> Bindings = new();
+        public Dictionary<string, Action> OnPressActions = new();
+        public Dictionary<string, Action> OnHeldActions = new();
+        public Dictionary<string, Action> OnReleaseActions = new();
+
+
+        public Action OnMouseMove;
+
+
+        public void SetMousePosition(Vector2 absolutePosition, Vector2 relativePosition)
+        {
+            PreviousX = PositionX;
+            PreviousY = PositionY;
+
+            PreviousPosition = Position;
+            Position = absolutePosition;
+            RelativePosition = relativePosition;
+
+
+
+            PositionX = absolutePosition.X;
+            PositionY = absolutePosition.Y;
+
+            RelativeX = relativePosition.X;
+            RelativeY = relativePosition.Y;
+        }
+
+        public void SaveMouseBindings()
+        {
+            Debug.WriteLine("TODO: Implement!");
+        }
+
+        public void LoadMouseBindings()
+        {
+            Debug.WriteLine("TODO: Implement!");
+        }
+
+
+
+
+        /*public Vector2 position;
         public Vector2 previousPosition;
         public int previousScrollWheelValue;
         public Dictionary<string, MouseButton> actionButtonPairs;
@@ -62,6 +117,6 @@ namespace SequoiaEngine
             Vector2 truePosition = physicsDistanceFromCenter + cameraLocation.position;
 
             return truePosition;
-        }
+        }*/
     }
 }

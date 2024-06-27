@@ -1,5 +1,4 @@
-﻿using CrowEngine;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
@@ -43,6 +42,7 @@ namespace Biosphere
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.ApplyChanges();
+            ResourceManager.Manager = Content;
 
             Window.AllowUserResizing = true;
 

@@ -42,20 +42,25 @@ namespace SequoiaEngine
                 {
                     MouseInput mouseInput = gameObjects[id].GetComponent<MouseInput>();
                     MouseState mouseState = Mouse.GetState();
-                    mouseInput.previousPosition = new Vector2(mouseInput.position.X, mouseInput.position.Y);
-                    mouseInput.previousActions = new Dictionary<string, bool>(mouseInput.actions);
 
-                    mouseInput.position = new Vector2(mouseState.X, mouseState.Y);
+                    Vector2 newMouseState = new Vector2(mouseState.X, mouseState.Y);
 
-                    foreach (string action in mouseInput.actionButtonPairs.Keys)
+                    if (newMouseState != mouseInput.PreviousPosition)
                     {
-                        if (!mouseInput.actions.ContainsKey(action))
-                        {
-                            mouseInput.actions.Add(action, false);
-                            mouseInput.previousActions.Add(action, false);
-                        }
+                        mouseInput.OnMouseMove?.Invoke();
+                    }
 
-                        mouseInput.actions[action] = GetMouseState(mouseState, mouseInput, action);
+
+                    mouseInput.SetMousePosition(newMouseState, newMouseState - mouseInput.PreviousPosition);
+
+
+
+                    foreach (KeyValuePair<MouseButton, string> button in mouseInput.Bindings)
+                    {
+                        if (GetMouseState(mouseState, mouseInput, button.Key))
+                        {
+                            mouseInput.OnPressActions[button.Value]?.Invoke();
+                        }
                     }
                 }
 
@@ -83,9 +88,9 @@ namespace SequoiaEngine
             }
         }
 
-        private bool GetMouseState(MouseState mouseState, MouseInput mouseInput, string action)
+        private bool GetMouseState(MouseState mouseState, MouseInput mouseInput, MouseButton button)
         {
-            switch (mouseInput.actionButtonPairs[action])
+            switch (button)
             {
                 case MouseButton.LeftButton:
                     return mouseState.LeftButton == ButtonState.Pressed;
@@ -98,18 +103,22 @@ namespace SequoiaEngine
                 case MouseButton.x2Button:
                     return mouseState.XButton2 == ButtonState.Pressed;
                 case MouseButton.scrollWheelUp:
-                    bool changedScrollUp = mouseState.ScrollWheelValue > mouseInput.previousScrollWheelValue;
+                    bool changedScrollUp = mouseState.ScrollWheelValue > mouseInput.ScrollPosition;
+                    
                     if (changedScrollUp)
                     {
-                        mouseInput.previousScrollWheelValue = mouseState.ScrollWheelValue;
+                        mouseInput.ScrollPosition = mouseState.ScrollWheelValue;
                     }
+                    
                     return changedScrollUp;
                 case MouseButton.scrollWheelDown:
-                    bool changedScrollDown = mouseState.ScrollWheelValue < mouseInput.previousScrollWheelValue;
+                    bool changedScrollDown = mouseState.ScrollWheelValue < mouseInput.ScrollPosition;
+                    
                     if (changedScrollDown)
                     {
-                        mouseInput.previousScrollWheelValue = mouseState.ScrollWheelValue;
+                        mouseInput.ScrollPosition = mouseState.ScrollWheelValue;
                     }
+                    
                     return changedScrollDown;
                 default:
                     break;
