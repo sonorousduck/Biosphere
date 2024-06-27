@@ -30,6 +30,14 @@ namespace SequoiaEngine
             isEnabled = true;
         }
 
+
+
+        public virtual void Start()
+        {
+
+        }
+
+
         /// <summary>
         /// When enabled, a system is part of the global update queue
         /// </summary>

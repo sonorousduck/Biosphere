@@ -21,6 +21,8 @@ namespace Biosphere
         private bool newScreenFocused;
         const int VIRTUAL_WIDTH = 480;
         const int VIRTUAL_HEIGHT = 270; // Aspect ratio of 16:9
+
+        InputManager inputManager;
         
         
         public Game1()
@@ -30,6 +32,7 @@ namespace Biosphere
             Components.Add(screenManager);
             screens = new();
 
+            inputManager = new();
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -76,6 +79,7 @@ namespace Biosphere
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            inputManager.Update();
             // Diplays FPS
             /*            Debug.WriteLine(1 / gameTime.ElapsedGameTime.TotalSeconds);
             */

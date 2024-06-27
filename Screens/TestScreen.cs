@@ -28,6 +28,7 @@ namespace Biosphere
         private ParticleSystem particleSystem;
         private InputSystem inputSystem;
         private ScriptSystem scriptSystem;
+        private 
        // private LightRenderingSystem lightRenderer;
         RenderTarget2D mainRenderTarget;
         private GameObject camera;
