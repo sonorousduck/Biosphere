@@ -36,20 +36,12 @@ namespace SequoiaEngine
             {
                 RenderedComponent renderedComponent = gameObjects[id].GetComponent<RenderedComponent>();
                 Vector2 trueRenderPosition;
-                float renderDepth = 1 - gameObjects[id].GetComponent<Transform>().position.Y / height;
 
-                if (renderDepth > 1)
-                {
-                    renderDepth = 1;
-                }
-                else if (renderDepth < 0)
-                {
-                    renderDepth = 0;
-                }
+               
 
                 if (renderedComponent.IsHUD)
                 {
-                    trueRenderPosition = gameObjects[id].GetComponent<Transform>().position - new Vector2(width, height) / 2f;
+                    trueRenderPosition = gameObjects[id].GetComponent<Transform>().position;
                 }
                 else
                 {
@@ -61,15 +53,29 @@ namespace SequoiaEngine
                     AnimatedSprite animatedSprite = gameObjects[id].GetComponent<AnimatedSprite>();
                     Transform transform = gameObjects[id].GetComponent<Transform>();
                     int currentX = (int)(animatedSprite.currentFrame * animatedSprite.singleFrameSize.X);
-                    spriteBatch.Draw(animatedSprite.spriteSheet, trueRenderPosition, new Rectangle(currentX, 0, (int)animatedSprite.singleFrameSize.X, (int)animatedSprite.singleFrameSize.Y), Color.White, transform.rotation, animatedSprite.singleFrameSize / 2, transform.scale, SpriteEffects.None, renderDepth);
+                    spriteBatch.Draw(animatedSprite.spriteSheet, 
+                        trueRenderPosition, 
+                        new Rectangle(currentX, 0, 
+                        (int)animatedSprite.singleFrameSize.X, 
+                        (int)animatedSprite.singleFrameSize.Y), 
+                        Color.White, transform.rotation, 
+                        animatedSprite.singleFrameSize / 2, 
+                        transform.scale, SpriteEffects.None, 
+                        gameObjects[id].GetComponent<AnimatedSprite>().renderDepth
+                        );
                 }
                 if (gameObjects[id].ContainsComponent<Sprite>())
                 {
                     Sprite sprite = gameObjects[id].GetComponent<Sprite>();
-                    spriteBatch.Draw(sprite.sprite, trueRenderPosition, null,
-                        sprite.color, gameObjects[id].GetComponent<Transform>().rotation,
-                        sprite.center, gameObjects[id].GetComponent<Transform>().scale,
-                        SpriteEffects.None, renderDepth);
+                    spriteBatch.Draw(sprite.sprite, 
+                        trueRenderPosition, 
+                        null,
+                        sprite.color, 
+                        gameObjects[id].GetComponent<Transform>().rotation,
+                        sprite.center, 
+                        gameObjects[id].GetComponent<Transform>().scale,
+                        SpriteEffects.None, 
+                        gameObjects[id].GetComponent<Sprite>().renderDepth);
                 }
 
                 /*if (gameObjects[id].ContainsComponent<MultiAnimatedSprite>())

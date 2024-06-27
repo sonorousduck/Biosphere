@@ -22,9 +22,9 @@ namespace SequoiaEngine
         public bool completedPlay { get; set; }
         public Dictionary<int, string> callbacks { get; set; }
         public Queue<string> callbackToRun { get; set; }
+        public float renderDepth { get; set; }
 
-
-        public AnimatedSprite(Texture2D spriteSheet, int[] frameTiming, Vector2 singleFrameSize, int layerDepth = 0, bool isHUD = false, int startFrame = 0, int endFrame = 0, bool playOnce = false, Dictionary<int, string> callbacks = null)
+        public AnimatedSprite(Texture2D spriteSheet, int[] frameTiming, Vector2 singleFrameSize, int layerDepth = 0, bool isHUD = false, int startFrame = 0, int endFrame = 0, bool playOnce = false, Dictionary<int, string> callbacks = null, float renderDepth = 0f)
         {
             this.spriteSheet = spriteSheet;
             this.currentFrame = startFrame;
@@ -39,6 +39,7 @@ namespace SequoiaEngine
             this.completedPlay = false;
             this.callbacks = callbacks;
             this.callbackToRun = new Queue<string>();
+            this.renderDepth = renderDepth;
         }
     }
 }

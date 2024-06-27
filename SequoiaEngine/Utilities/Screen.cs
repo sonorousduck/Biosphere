@@ -38,7 +38,7 @@ namespace SequoiaEngine
             this.spriteBatch = new SpriteBatch(graphicsDevice);
         }
 
-        public abstract void LoadContent();
+        public override abstract void LoadContent();
 
         /// <summary>
         /// Updates all registered systems. You shouldn't need to modify this

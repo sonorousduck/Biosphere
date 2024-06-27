@@ -14,7 +14,9 @@ using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended;
 
-namespace CrowEngine
+
+
+namespace Biosphere
 {
     class TestScreen : Screen
     {
@@ -102,7 +104,7 @@ namespace CrowEngine
 
 
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointWrap);
 
             spriteBatch.Draw(tileRenderTarget, new Rectangle(0, 0, window.ClientBounds.Width, window.ClientBounds.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(mainRenderTarget, new Rectangle(0, 0, window.ClientBounds.Width, window.ClientBounds.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
@@ -114,10 +116,23 @@ namespace CrowEngine
         public override void LoadContent()
         {
 
+            ResourceManager.Load<Texture2D>("Sprites/Cursor", "cursor");
+            ResourceManager.Load<Texture2D>("Sprites/ForestStoreTile", "forestStoreTile");
+            ResourceManager.Load<Texture2D>("Sprites/ForestTile", "forestTile");
+            ResourceManager.Load<Texture2D>("Sprites/MainInventoryBackground", "mainInventoryBackground");
+            ResourceManager.Load<Texture2D>("Sprites/MountainsStoreTile", "mountainsStoreTile");
+            ResourceManager.Load<Texture2D>("Sprites/MountainTile", "mountainTile");
+            ResourceManager.Load<Texture2D>("Sprites/NewTileLocation", "newTileLocation");
+            ResourceManager.Load<Texture2D>("Sprites/PlainsStoreTile", "plainsStoreTile");
+            ResourceManager.Load<Texture2D>("Sprites/PlainsTemp", "plainsTemp");
+
+
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
             fontRenderingSystem = new FontRenderingSystem(systemManager, camera);
             //lightRenderer = new LightRenderingSystem(systemManager, camera, graphicsDevice);
             //lightRenderer.globalLightLevel = 0f;
+
+
 
         }
 
@@ -181,7 +196,8 @@ namespace CrowEngine
                             StationaryColor = Color.Green.ToHsl(),
                             VelocityColor = Color.Blue.ToHsl(),
                             VelocityThreshold = 80f
-                        }
+                        },
+
                         }
                     }
                 }
@@ -196,6 +212,18 @@ namespace CrowEngine
 
             systemManager.Add(testParticles);
 
+
+            systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
+            systemManager.Add(CameraPrefab.Create());
+
+
+
+            GameObject test = new GameObject();
+
+            test.Add(new Sprite(ResourceManager.Get<Texture2D>("mountainsStoreTile"), Color.White, 1.0f, true));
+            test.Add(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
+
+            systemManager.Add(test);
 
 
 
