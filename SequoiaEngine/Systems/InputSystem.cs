@@ -16,183 +16,145 @@ namespace SequoiaEngine
         {
         }
 
+        /// <summary>
+        /// Register the 
+        /// </summary>
+        public override void Start()
+        {
+            base.Start();
+
+            foreach (uint id in gameObjects.Keys)
+            {
+                if (gameObjects[id].TryGetComponent(out KeyboardInput keyboardInput))
+                {
+                    InputConfig.Instance.RegisterKeyboardDefaultConfig(keyboardInput.DefaultBindings);
+                }
+                if (gameObjects[id].TryGetComponent(out ControllerInput controllerInput))
+                {
+                    InputConfig.Instance.RegisterControllerDefaultConfig(controllerInput.DefaultBindings);
+                }
+                if (gameObjects[id].TryGetComponent(out MouseInput mouseInput))
+                {
+                    InputConfig.Instance.RegisterMouseDefaultConfig(mouseInput.DefaultBindings);
+                }
+            }
+        }
+            
+
         protected override void Update(GameTime gameTime)
         {
+            InputConfig inputConfig = InputConfig.Instance;
+            InputManager inputState = InputManager.Instance;
+
             foreach (uint id in gameObjects.Keys)
             {
 
-                if (gameObjects[id].ContainsComponent<KeyboardInput>())
+                // =============================================================================================================
+                //
+                // Keyboard Input handling
+                //
+                // =============================================================================================================
+                if (gameObjects[id].TryGetComponent(out KeyboardInput keyboardInput))
                 {
-                    KeyboardInput keyboardInput = gameObjects[id].GetComponent<KeyboardInput>();
-                    KeyboardState keyboardState = Keyboard.GetState();
-                    keyboardInput.previousActions = new Dictionary<string, bool>(keyboardInput.actions);
+                    Dictionary<string, Keys> actions = inputConfig.ActionsToKeyboardKeys;
 
-                    foreach (string action in keyboardInput.actionKeyPairs.Keys)
+                    foreach (KeyValuePair<string, Action> keyValuePair in keyboardInput.OnPressActions)
                     {
-                        if (!keyboardInput.actions.ContainsKey(action))
+                        if (inputState.KeyboardButtonState[actions[keyValuePair.Key]] == ButtonStateExtended.Pressed)
                         {
-                            keyboardInput.actions.Add(action, false);
-                            keyboardInput.previousActions.Add(action, false);
+                            keyboardInput.OnPressActions[keyValuePair.Key]?.Invoke();
                         }
-                        keyboardInput.actions[action] = keyboardState.IsKeyDown(keyboardInput.actionKeyPairs[action]);
-                    }
-                }
-
-                if (gameObjects[id].ContainsComponent<MouseInput>())
-                {
-                    MouseInput mouseInput = gameObjects[id].GetComponent<MouseInput>();
-                    MouseState mouseState = Mouse.GetState();
-
-                    Vector2 newMouseState = new Vector2(mouseState.X, mouseState.Y);
-
-                    if (newMouseState != mouseInput.PreviousPosition)
-                    {
-                        mouseInput.OnMouseMove?.Invoke();
                     }
 
-
-                    mouseInput.SetMousePosition(newMouseState, newMouseState - mouseInput.PreviousPosition);
-
-
-
-                    foreach (KeyValuePair<MouseButton, string> button in mouseInput.Bindings)
+                    foreach (KeyValuePair<string, Action> keyValuePair in keyboardInput.OnHeldActions)
                     {
-                        if (GetMouseState(mouseState, mouseInput, button.Key))
+                        if (inputState.KeyboardButtonState[actions[keyValuePair.Key]] == ButtonStateExtended.Held)
                         {
-                            mouseInput.OnPressActions[button.Value]?.Invoke();
+                            keyboardInput.OnHeldActions[keyValuePair.Key]?.Invoke();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, Action> keyValuePair in keyboardInput.OnReleaseActions)
+                    {
+                        if (inputState.KeyboardButtonState[actions[keyValuePair.Key]] == ButtonStateExtended.Released)
+                        {
+                            keyboardInput.OnReleaseActions[keyValuePair.Key]?.Invoke();
                         }
                     }
                 }
 
 
-                if (gameObjects[id].ContainsComponent<ControllerInput>())
+                // =============================================================================================================
+                //
+                // Controller Input handling
+                //
+                // =============================================================================================================
+
+                if (gameObjects[id].TryGetComponent(out ControllerInput controllerInput))
                 {
-                    ControllerInput controllerInput = gameObjects[id].GetComponent<ControllerInput>();
-                    GamePadState gamePadState = GamePad.GetState(controllerInput.controllerOwner);
+                    Dictionary<string, Buttons> actions = inputConfig.ActionsToControllerButtons;
 
-                    controllerInput.previousActions = new Dictionary<string, bool>(controllerInput.actions);
-
-                    foreach (string action in controllerInput.actionButtonPairs.Keys)
+                    foreach (KeyValuePair<string, Action> keyValuePair in controllerInput.OnPressActions)
                     {
-                        if (!controllerInput.actions.ContainsKey(action))
+                        if (inputState.ControllerButtonState[actions[keyValuePair.Key]] == ButtonStateExtended.Pressed)
                         {
-                            controllerInput.actions.Add(action, false);
-                            controllerInput.previousActions.Add(action, false);
+                            controllerInput.OnPressActions[keyValuePair.Key]?.Invoke();
                         }
-
-                        controllerInput.actions[action] = GetControllerState(controllerInput.actionButtonPairs[action], gamePadState) > 0.5f;
                     }
 
+                    foreach (KeyValuePair<string, Action> keyValuePair in keyboardInput.OnHeldActions)
+                    {
+                        if (inputState.ControllerButtonState[actions[keyValuePair.Key]] == ButtonStateExtended.Held)
+                        {
+                        controllerInput.OnHeldActions[keyValuePair.Key]?.Invoke();
+                        }
+                    }
 
+                    foreach (KeyValuePair<string, Action> keyValuePair in keyboardInput.OnReleaseActions)
+                    {
+                        if (inputState.ControllerButtonState[actions[keyValuePair.Key]] == ButtonStateExtended.Released)
+                        {
+                        controllerInput.OnReleaseActions[keyValuePair.Key]?.Invoke();
+                        }
+                    }
                 }
-            }
-        }
 
-        private bool GetMouseState(MouseState mouseState, MouseInput mouseInput, MouseButton button)
-        {
-            switch (button)
-            {
-                case MouseButton.LeftButton:
-                    return mouseState.LeftButton == ButtonState.Pressed;
-                case MouseButton.MiddleButton:
-                    return mouseState.MiddleButton == ButtonState.Pressed;
-                case MouseButton.RightButton:
-                    return mouseState.RightButton == ButtonState.Pressed;
-                case MouseButton.x1Button:
-                    return mouseState.XButton1 == ButtonState.Pressed;
-                case MouseButton.x2Button:
-                    return mouseState.XButton2 == ButtonState.Pressed;
-                case MouseButton.scrollWheelUp:
-                    bool changedScrollUp = mouseState.ScrollWheelValue > mouseInput.ScrollPosition;
-                    
-                    if (changedScrollUp)
-                    {
-                        mouseInput.ScrollPosition = mouseState.ScrollWheelValue;
-                    }
-                    
-                    return changedScrollUp;
-                case MouseButton.scrollWheelDown:
-                    bool changedScrollDown = mouseState.ScrollWheelValue < mouseInput.ScrollPosition;
-                    
-                    if (changedScrollDown)
-                    {
-                        mouseInput.ScrollPosition = mouseState.ScrollWheelValue;
-                    }
-                    
-                    return changedScrollDown;
-                default:
-                    break;
-            }
+                
+                // =============================================================================================================
+                //
+                // Mouse Input handling
+                //
+                // =============================================================================================================
 
-
-            return false;
-        }
-
-
-
-        /// <summary>
-        /// Very ugly way of reading controller input. Should be improved upon, but allows all input types to be treated as floats
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="gamePadState"></param>
-        /// <returns></returns>
-        private float GetControllerState(Buttons type, GamePadState gamePadState)
-        {
-            if (gamePadState.IsConnected)
-            {
-                switch (type)
+                if (gameObjects[id].TryGetComponent(out MouseInput mouseInput))
                 {
-                    case (Buttons.A):
-                        return gamePadState.IsButtonDown(Buttons.A) ? 1 : 0;
-                    case (Buttons.B):
-                        return gamePadState.IsButtonDown(Buttons.B) ? 1 : 0;
-                    case (Buttons.Back):
-                        return gamePadState.IsButtonDown(Buttons.Back) ? 1 : 0;
-                    case (Buttons.DPadDown):
-                        return gamePadState.DPad.Down == ButtonState.Pressed ? 1 : 0;
-                    case (Buttons.DPadLeft):
-                        return gamePadState.DPad.Left == ButtonState.Pressed ? 1 : 0;
-                    case (Buttons.DPadRight):
-                        return gamePadState.DPad.Right == ButtonState.Pressed ? 1 : 0;
-                    case (Buttons.DPadUp):
-                        return gamePadState.DPad.Up == ButtonState.Pressed ? 1 : 0;
-                    case (Buttons.LeftShoulder):
-                        return gamePadState.IsButtonDown(Buttons.LeftShoulder) ? 1 : 0;
-                    case (Buttons.LeftThumbstickLeft):
-                        return -gamePadState.ThumbSticks.Left.X;
-                    case (Buttons.LeftThumbstickRight):
-                        return gamePadState.ThumbSticks.Left.X;
-                    case (Buttons.LeftStick):
-                        return gamePadState.IsButtonDown(Buttons.LeftStick) ? 1 : 0;
-                    case (Buttons.LeftThumbstickUp):
-                        return gamePadState.ThumbSticks.Left.Y;
-                    case (Buttons.LeftThumbstickDown):
-                        return -gamePadState.ThumbSticks.Left.Y;
-                    case (Buttons.LeftTrigger):
-                        return gamePadState.Triggers.Left;
-                    case (Buttons.RightShoulder):
-                        return gamePadState.IsButtonDown(Buttons.RightShoulder) ? 1 : 0;
-                    case (Buttons.RightThumbstickRight):
-                        return gamePadState.ThumbSticks.Right.X;
-                    case (Buttons.RightThumbstickDown):
-                        return gamePadState.IsButtonDown(Buttons.RightStick) ? 1 : 0;
-                    case (Buttons.RightThumbstickUp):
-                        return gamePadState.ThumbSticks.Right.Y;
-                    case (Buttons.RightTrigger):
-                        return gamePadState.Triggers.Right;
-                    case (Buttons.Start):
-                        return gamePadState.IsButtonDown(Buttons.Start) ? 1 : 0;
-                    case (Buttons.X):
-                        return gamePadState.IsButtonDown(Buttons.X) ? 1 : 0;
-                    case (Buttons.Y):
-                        return gamePadState.IsButtonDown(Buttons.Y) ? 1 : 0;
-                    default:
-                        Debug.WriteLine("Found a controller input type that was non-existant, returning 0");
-                        return 0;
-                }
+                    Dictionary<string, MouseButton> actions = inputConfig.ActionsToMouseButtons;
 
+                    foreach (KeyValuePair<string, Action> keyValuePair in mouseInput.OnPressActions)
+                    {
+                        if (inputState.MouseButtonsState[actions[keyValuePair.Key]] == ButtonStateExtended.Pressed)
+                        {
+                            mouseInput.OnPressActions[keyValuePair.Key]?.Invoke();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, Action> keyValuePair in mouseInput.OnHeldActions)
+                    {
+                        if (inputState.MouseButtonsState[actions[keyValuePair.Key]] == ButtonStateExtended.Held)
+                        {
+                            mouseInput.OnHeldActions[keyValuePair.Key]?.Invoke();
+                        }
+                    }
+
+                    foreach (KeyValuePair<string, Action> keyValuePair in mouseInput.OnReleaseActions)
+                    {
+                        if (inputState.MouseButtonsState[actions[keyValuePair.Key]] == ButtonStateExtended.Released)
+                        {
+                            mouseInput.OnReleaseActions[keyValuePair.Key]?.Invoke();
+                        }
+                    }
+                }
             }
-            return 0;
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
 using SequoiaEngine;
+using System;
 using System.Collections.Generic;
 
 
@@ -23,6 +24,8 @@ namespace Biosphere
         const int VIRTUAL_HEIGHT = 270; // Aspect ratio of 16:9
 
         InputManager inputManager;
+        InputConfig inputConfig;
+        GameManager gameManager;
         
         
         public Game1()
@@ -33,6 +36,10 @@ namespace Biosphere
             screens = new();
 
             inputManager = new();
+            inputConfig = new();
+            gameManager = new(_graphics, Window, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+
+            inputConfig.LoadControls();
 
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
@@ -45,17 +52,32 @@ namespace Biosphere
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
             _graphics.ApplyChanges();
+
+            gameManager.UpdateWidthHeight(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             ResourceManager.Manager = Content;
 
             Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += OnWindowResize;
+
 
             screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
             currentScreen = screens[ScreenEnum.Test];
             nextScreen = ScreenEnum.Test;
-
+            newScreenFocused = true;
 
 
             base.Initialize();
+            GameManager.Instance.Initialize(GraphicsDevice);
+        }
+
+        private void OnWindowResize(object sender, EventArgs e)
+        {
+            /*            _graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Viewport.Width;
+                        _graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Viewport.Height;
+                        _graphics.ApplyChanges();*/
+
+            gameManager.UpdateWidthHeight(_graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
+            
         }
 
         protected override void LoadContent()
@@ -72,6 +94,7 @@ namespace Biosphere
                 screens[screen].LoadContent();
                 screens[screen].SetupGameObjects();
             }
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -79,6 +102,7 @@ namespace Biosphere
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            gameManager.Update(gameTime);
             inputManager.Update();
             // Diplays FPS
             /*            Debug.WriteLine(1 / gameTime.ElapsedGameTime.TotalSeconds);
@@ -86,6 +110,7 @@ namespace Biosphere
 
             if (newScreenFocused)
             {
+                currentScreen.Start();
                 currentScreen.OnScreenFocus();
                 newScreenFocused = false;
             }
@@ -97,9 +122,6 @@ namespace Biosphere
                 currentScreen.OnScreenDefocus();
                 newScreenFocused = true;
             }
-
-            // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 

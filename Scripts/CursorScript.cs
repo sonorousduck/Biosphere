@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Screens;
 using SequoiaEngine;
 using System;
@@ -32,7 +33,11 @@ namespace Biosphere
 
         public override void Update(GameTime gameTime)
         {
-            transform.position = InputManager.Instance.MousePositionState.Position * new Vector2(480, 270) / new Vector2(1280, 720);
+
+
+            transform.position = GameManager.Instance.Camera.ScreenToWorld(InputManager.Instance.MousePositionState.Position);
+
+            //transform.position = camera.ScreenToWorld(test);
         }
     }
 }

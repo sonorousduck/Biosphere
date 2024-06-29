@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 
 namespace SequoiaEngine
@@ -35,10 +36,10 @@ namespace SequoiaEngine
 
         public int ScrollPosition = 0;
 
-        public Dictionary<MouseButton, string> Bindings = new();
         public Dictionary<string, Action> OnPressActions = new();
         public Dictionary<string, Action> OnHeldActions = new();
         public Dictionary<string, Action> OnReleaseActions = new();
+        public Dictionary<string, MouseButton> DefaultBindings = new();
 
 
         public Action OnMouseMove;
@@ -62,16 +63,42 @@ namespace SequoiaEngine
             RelativeY = relativePosition.Y;
         }
 
-        public void SaveMouseBindings()
+        public void RegisterOnPressAction(string actionName, Action action)
         {
-            Debug.WriteLine("TODO: Implement!");
+            if (OnPressActions.ContainsKey(actionName))
+            {
+                OnPressActions[actionName] += action;
+            }
+            else
+            {
+                OnPressActions.Add(actionName, action);
+            }
+
         }
 
-        public void LoadMouseBindings()
+        public void RegisterOnHeldAction(string actionName, Action action)
         {
-            Debug.WriteLine("TODO: Implement!");
+            if (OnHeldActions.ContainsKey(actionName))
+            {
+                OnHeldActions[actionName] += action;
+            }
+            else
+            {
+                OnHeldActions.Add(actionName, action);
+            }
         }
 
+        public void RegisterOnReleaseAction(string actionName, Action action)
+        {
+            if (OnReleaseActions.ContainsKey(actionName))
+            {
+                OnReleaseActions[actionName] += action;
+            }
+            else
+            {
+                OnReleaseActions.Add(actionName, action);
+            }
+        }
 
 
 

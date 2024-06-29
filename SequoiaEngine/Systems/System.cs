@@ -10,6 +10,17 @@ namespace SequoiaEngine
     /// </summary>
     public abstract class System
     {
+        private static uint nextId = 0;
+
+        public uint Id { get; private set; }
+
+
+        public System()
+        {
+
+        }
+
+
         protected Dictionary<uint, GameObject> gameObjects = new Dictionary<uint, GameObject>();
         private bool isEnabled;
 
@@ -26,7 +37,7 @@ namespace SequoiaEngine
             this.systemManager.AddGameObject += Add;
             this.systemManager.RemoveGameObject += Remove;
             this.systemManager.UpdateSystem += Update;
-
+            Id = nextId++;
             isEnabled = true;
         }
 

@@ -28,14 +28,19 @@ namespace SequoiaEngine
         {
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, bool isDrawingHud = false)
         {
             foreach (uint id in gameObjects.Keys)
             {
                 Text text = gameObjects[id].GetComponent<Text>();
                 Transform transform = gameObjects[id].GetComponent<Transform>();
 
-                Vector2 distanceFromCenter;
+                if (isDrawingHud != text.isHUDElement)
+                {
+                    return;
+                }
+
+/*                Vector2 distanceFromCenter;
                 if (!text.isHUDElement)
                 {
                     distanceFromCenter = gameObjects[id].GetComponent<Transform>().position - camera.GetComponent<Transform>().position;
@@ -46,11 +51,11 @@ namespace SequoiaEngine
                 }
 
                 Vector2 renderDistanceFromCenter = distanceFromCenter;
-                Vector2 trueRenderPosition = renderDistanceFromCenter;
+                Vector2 trueRenderPosition = renderDistanceFromCenter;*/
 
 
-                if (text.renderOutline) DrawBackground(text, transform, trueRenderPosition, spriteBatch);
-                spriteBatch.DrawString(text.spriteFont, text.text, trueRenderPosition, text.color, transform.rotation, text.centerOfRotation, transform.scale, text.spriteEffect, text.layerDepth);
+                if (text.renderOutline) DrawBackground(text, transform, gameObjects[id].GetComponent<Transform>().position, spriteBatch);
+                spriteBatch.DrawString(text.spriteFont, text.text, gameObjects[id].GetComponent<Transform>().position, text.color, transform.rotation, text.centerOfRotation, transform.scale, text.spriteEffect, text.layerDepth);
 
             }
         }

@@ -30,31 +30,24 @@ namespace SequoiaEngine
             //ResourceManager.Load<Texture2D>("Images/box", "box");
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, bool isDrawingHud = false)
         {
             foreach (uint id in gameObjects.Keys)
             {
                 RenderedComponent renderedComponent = gameObjects[id].GetComponent<RenderedComponent>();
-                Vector2 trueRenderPosition;
+                Vector2 renderPosition = gameObjects[id].GetComponent<Transform>().position;
 
-               
+                if (renderedComponent.IsHUD != isDrawingHud) continue;
 
-                if (renderedComponent.IsHUD)
-                {
-                    trueRenderPosition = gameObjects[id].GetComponent<Transform>().position;
-                }
-                else
-                {
-                    trueRenderPosition = gameObjects[id].GetComponent<Transform>().position - camera.GetComponent<Transform>().position;
-                }
+              
 
                 if (gameObjects[id].ContainsComponent<AnimatedSprite>())
                 {
                     AnimatedSprite animatedSprite = gameObjects[id].GetComponent<AnimatedSprite>();
                     Transform transform = gameObjects[id].GetComponent<Transform>();
                     int currentX = (int)(animatedSprite.currentFrame * animatedSprite.singleFrameSize.X);
-                    spriteBatch.Draw(animatedSprite.spriteSheet, 
-                        trueRenderPosition, 
+                    spriteBatch.Draw(animatedSprite.spriteSheet,
+                        renderPosition, 
                         new Rectangle(currentX, 0, 
                         (int)animatedSprite.singleFrameSize.X, 
                         (int)animatedSprite.singleFrameSize.Y), 
@@ -67,8 +60,8 @@ namespace SequoiaEngine
                 if (gameObjects[id].ContainsComponent<Sprite>())
                 {
                     Sprite sprite = gameObjects[id].GetComponent<Sprite>();
-                    spriteBatch.Draw(sprite.sprite, 
-                        trueRenderPosition, 
+                    spriteBatch.Draw(sprite.sprite,
+                        renderPosition, 
                         null,
                         sprite.color, 
                         gameObjects[id].GetComponent<Transform>().rotation,
@@ -99,7 +92,7 @@ namespace SequoiaEngine
 
                     if (gameObjects[id].ContainsComponent<Text>()) // adjust the drawing area to fit where it really should be
                     {
-                        trueRenderPosition = gameObjects[id].GetComponent<Transform>().position - new Vector2(width, height) / 2f + centerOfScreen;
+                        renderPosition = gameObjects[id].GetComponent<Transform>().position - new Vector2(width, height) / 2f + centerOfScreen;
                     }
 
                     if (circleCollider != null)
@@ -107,7 +100,7 @@ namespace SequoiaEngine
                         Texture2D circleTexture = ResourceManager.Get<Texture2D>("circle");
                         Vector2 offset = gameObjects[id].GetComponent<CircleCollider>().offset;
 
-                        spriteBatch.Draw(circleTexture, trueRenderPosition + offset, null,
+                        spriteBatch.Draw(circleTexture, renderPosition + offset, null,
                         Color.Green, gameObjects[id].GetComponent<Transform>().rotation,
                         new Vector2(circleTexture.Width, circleTexture.Height) / 2f, 2f / circleTexture.Width * circleCollider.radius,
                         SpriteEffects.None, 0);
@@ -116,7 +109,7 @@ namespace SequoiaEngine
                     {
                         Texture2D boxTexture = ResourceManager.Get<Texture2D>("box");
                         Vector2 offset = gameObjects[id].GetComponent<RectangleCollider>().offset;
-                        spriteBatch.Draw(boxTexture, trueRenderPosition + offset, null,
+                        spriteBatch.Draw(boxTexture, renderPosition + offset, null,
                         Color.Green, gameObjects[id].GetComponent<Transform>().rotation,
                         new Vector2(boxTexture.Width, boxTexture.Height) / 2f, new Vector2(2f / boxTexture.Width * (rectangleCollider.size.X / 2), 2f / boxTexture.Height * (rectangleCollider.size.Y / 2)),
                         SpriteEffects.None, 0);

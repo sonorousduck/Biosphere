@@ -65,6 +65,27 @@ namespace SequoiaEngine
         /// </summary>
         /// <typeparam name="TComponent">The type of component to get</typeparam>
         /// <returns>The component if found, or null otherwise</returns>
+        public bool TryGetComponent<TComponent>(out TComponent component) where TComponent : Component
+        {
+            bool value = (components.TryGetValue(typeof(TComponent), out Component tempComponent));
+            
+            if (value)
+            {
+                component = tempComponent as TComponent;
+                return true;
+            }
+
+            component = GetInheritedComponent<TComponent>();
+            return false;
+            
+        }
+
+
+        /// <summary>
+        /// Used to get reference to a component on a game object, which will be useful for scripting
+        /// </summary>
+        /// <typeparam name="TComponent">The type of component to get</typeparam>
+        /// <returns>The component if found, or null otherwise</returns>
         public TComponent GetComponent<TComponent>()
             where TComponent : Component
         {

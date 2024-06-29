@@ -47,17 +47,17 @@ namespace SequoiaEngine
                 if (rb.usesGravity)
                 {
                     // Update velocity from gravity
-                    rb.velocity += new Vector2(0, GRAVITY * (gameTime.ElapsedGameTime.Milliseconds / 1000f) * rb.gravityScale);
+                    rb.velocity += new Vector2(0, GRAVITY * (GameManager.Instance.ElapsedMicroseconds) * rb.gravityScale);
 
                 }
                 Transform transform = gameObjects[id].GetComponent<Transform>();
 
                 // Update velocity from accleration as well
-                rb.velocity += new Vector2(rb.acceleration.X * gameTime.ElapsedGameTime.Milliseconds / 1000f, rb.acceleration.Y * MathF.Pow(gameTime.ElapsedGameTime.Milliseconds / 1000f, 2f));
+                rb.velocity += new Vector2(rb.acceleration.X * GameManager.Instance.ElapsedMicroseconds, rb.acceleration.Y * MathF.Pow(GameManager.Instance.ElapsedMicroseconds, 2f));
 
                 transform.previousPosition = transform.position;
                 // Update position from velocity
-                transform.position += rb.velocity * (gameTime.ElapsedGameTime.Milliseconds / 1000f);
+                transform.position += rb.velocity * (GameManager.Instance.ElapsedMicroseconds);
                 quadtree.Insert(gameObject);
             }
 

@@ -14,7 +14,7 @@ namespace SequoiaEngine
     {
         public ParticleEffect Effect;
         public Texture2D Texture;
-
+        public bool IsHud = false;
         public Particle(Texture2D texture, ParticleEffect effect)
         {
             this.Texture = texture;

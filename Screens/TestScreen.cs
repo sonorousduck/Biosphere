@@ -58,22 +58,25 @@ namespace Biosphere
 
             animationSystem = new AnimationSystem(systemManager);
 
-            camera = new GameObject();
+            camera = CameraPrefab.Create();
+
+/*            camera = new GameObject();
             camera.Add(new Transform(Vector2.Zero, 0, Vector2.One));
             camera.Add(new Rigidbody());
-            camera.Add(new CircleCollider(1, false));
+            camera.Add(new CircleCollider(1, false));*/
             mainRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             tileRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             hudRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             systemManager.Add(camera);
         }
 
+
         public override void Draw(GameTime gameTime)
         {
             graphics.GraphicsDevice.SetRenderTarget(tileRenderTarget);
             graphics.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp, transformMatrix: GameManager.Instance.Camera.GetViewMatrix());
 
 
             spriteBatch.End();
@@ -85,7 +88,7 @@ namespace Biosphere
             graphics.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
             graphics.GraphicsDevice.Clear(Color.Transparent);
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp, transformMatrix: GameManager.Instance.Camera.GetViewMatrix());
             renderingSystem.Draw(gameTime, spriteBatch);
             particleRenderer.Draw(gameTime, spriteBatch);
             fontRenderingSystem.Draw(gameTime, spriteBatch);
@@ -96,20 +99,26 @@ namespace Biosphere
 
             graphics.GraphicsDevice.SetRenderTarget(hudRenderTarget);
             graphics.GraphicsDevice.DepthStencilState = new DepthStencilState() { DepthBufferEnable = true };
-            graphics.GraphicsDevice.Clear(Color.Transparent);
+            graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
+
+
+            renderingSystem.Draw(gameTime, spriteBatch, true);
+            particleRenderer.Draw(gameTime, spriteBatch, true);
+            fontRenderingSystem.Draw(gameTime, spriteBatch, true);
+
 
             spriteBatch.End();
             graphicsDevice.SetRenderTarget(null);
 
 
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointWrap);
+            spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: SamplerState.PointWrap);
 
-            spriteBatch.Draw(tileRenderTarget, new Rectangle(0, 0, window.ClientBounds.Width, window.ClientBounds.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
-            spriteBatch.Draw(mainRenderTarget, new Rectangle(0, 0, window.ClientBounds.Width, window.ClientBounds.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(hudRenderTarget, new Rectangle(0, 0, window.ClientBounds.Width, window.ClientBounds.Height), null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(tileRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
+            spriteBatch.Draw(hudRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
+            spriteBatch.Draw(mainRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
             spriteBatch.End(); 
         }
 
@@ -144,7 +153,13 @@ namespace Biosphere
 
         public override void OnScreenFocus()
         {
-            Debug.WriteLine("Default Screen was loaded");
+            inputSystem.Start();
+            physicsEngine.Start();
+            inputSystem.Start();
+            scriptSystem.Start();
+            particleSystem.Start();
+            particleRenderer.Start();
+            animationSystem.Start();
         }
 
         /// <summary>
@@ -215,7 +230,6 @@ namespace Biosphere
 
 
             systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
-            systemManager.Add(CameraPrefab.Create());
 
 
 
@@ -224,9 +238,6 @@ namespace Biosphere
             test.Add(new Sprite(ResourceManager.Get<Texture2D>("mountainsStoreTile"), Color.White, 1.0f, true));
             test.Add(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
             systemManager.Add(test);
-
-
-
         }
     }
 }

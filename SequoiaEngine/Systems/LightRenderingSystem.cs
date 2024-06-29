@@ -59,12 +59,12 @@ namespace SequoiaEngine
             foreach (uint id in gameObjects.Keys)
             {
                 Light light = gameObjects[id].GetComponent<Light>();
-                Vector2 distanceFromCenter = gameObjects[id].GetComponent<Transform>().position - camera.GetComponent<Transform>().position;
+/*                Vector2 distanceFromCenter = gameObjects[id].GetComponent<Transform>().position - camera.GetComponent<Transform>().position;
 
                 Vector2 renderDistanceFromCenter = distanceFromCenter;
-                Vector2 trueRenderingPosition = renderDistanceFromCenter;
+                Vector2 trueRenderingPosition = renderDistanceFromCenter;*/
 
-                spriteBatch.Draw(lightTexture, trueRenderingPosition, null, new Color(light.color, light.intensity), 0, new Vector2(lightTexture.Width, lightTexture.Height) / 2f, lightScaleFactor * light.range, SpriteEffects.None, 1);
+                spriteBatch.Draw(lightTexture, gameObjects[id].GetComponent<Transform>().position, null, new Color(light.color, light.intensity), 0, new Vector2(lightTexture.Width, lightTexture.Height) / 2f, lightScaleFactor * light.range, SpriteEffects.None, 1);
             }
             spriteBatch.End();
         }

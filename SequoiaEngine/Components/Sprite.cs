@@ -22,7 +22,7 @@ namespace SequoiaEngine
         /// <param name="center"></param>
         /// <param name="renderDepth"></param>
         /// <param name="isHUD"></param>
-        public Sprite(Texture2D sprite, Color color, Vector2 center, float renderDepth = 0, bool isHUD = false)
+        public Sprite(Texture2D sprite, Color color, Vector2 center, float renderDepth = 0, bool isHUD = false) : base(isHUD)
         {
             this.sprite = sprite;
             this.color = color;

@@ -15,11 +15,15 @@ namespace SequoiaEngine
         }
 
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, bool isDrawingHud = false)
         {
             foreach ((uint id, GameObject gameObject) in gameObjects)
             {
-                spriteBatch.Draw(gameObject.GetComponent<Particle>().Effect);
+                Particle particle = gameObject.GetComponent<Particle>();
+
+                if (isDrawingHud != particle.IsHud) return;
+
+                spriteBatch.Draw(particle.Effect);
             }
         }
 
