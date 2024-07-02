@@ -200,14 +200,14 @@ namespace SequoiaEngine
                 case MouseButton.RightButton:
                     return mouseState.RightButton == ButtonState.Pressed;
 
-                case MouseButton.x1Button:
+                case MouseButton.X1Button:
                     return mouseState.XButton1 == ButtonState.Pressed;
 
-                case MouseButton.x2Button:
+                case MouseButton.X2Button:
                     return mouseState.XButton2 == ButtonState.Pressed;
 
 
-                case MouseButton.scrollWheelUp:
+                case MouseButton.ScrollWheelUp:
                     bool changedScrollUp = mouseState.ScrollWheelValue > ScrollPosition;
 
                     if (changedScrollUp)
@@ -217,7 +217,7 @@ namespace SequoiaEngine
 
                     return changedScrollUp;
 
-                case MouseButton.scrollWheelDown:
+                case MouseButton.ScrollWheelDown:
                     bool changedScrollDown = mouseState.ScrollWheelValue < ScrollPosition;
 
                     if (changedScrollDown)

@@ -15,10 +15,10 @@ namespace SequoiaEngine
         LeftButton,
         MiddleButton,
         RightButton,
-        x1Button,
-        x2Button,
-        scrollWheelUp,
-        scrollWheelDown,
+        X1Button,
+        X2Button,
+        ScrollWheelUp,
+        ScrollWheelDown,
     }
     public class MouseInput : Input
     {
