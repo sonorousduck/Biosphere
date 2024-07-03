@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 
@@ -15,14 +14,31 @@ namespace SequoiaEngine
 
         private static uint nextId = 0;
 
-        public uint id { get; private set; }
+        public uint Id { get; private set; }
 
         private List<GameObject> children;
+        private GameObject parent;
 
         public GameObject()
         {
-            id = nextId++;
+            Id = nextId++;
             children = new List<GameObject>();
+
+            Transform defaultTransform = new();
+            this.Add(defaultTransform);
+        }
+
+        public GameObject(GameObject parent) : this()
+        {
+            this.parent = parent;
+        }
+
+        public GameObject(Transform transform)
+        {
+            Id = nextId++;
+            children = new List<GameObject>();
+
+            this.Add(transform);
         }
 
 
@@ -40,6 +56,16 @@ namespace SequoiaEngine
         { 
             return children; 
         }
+
+        /// <summary>
+        /// Used to get (if exists) the parent GameObject
+        /// </summary>
+        /// <returns></returns>
+        public GameObject GetParent()
+        {
+            return parent;
+        }
+
 
         /// <summary>
         /// Register a new child game object
@@ -232,7 +258,7 @@ namespace SequoiaEngine
 
         public override string ToString()
         {
-            return string.Format("{0}: {1}", id, string.Join(", ", from c in components.Values select c.GetType().Name));
+            return string.Format("{0}: {1}", Id, string.Join(", ", from c in components.Values select c.GetType().Name));
         }
     }
 }

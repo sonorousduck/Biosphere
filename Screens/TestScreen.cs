@@ -232,11 +232,16 @@ namespace Biosphere
             systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
 
 
+            Canvas canvas = new Canvas(Vector2.Zero, 0, Vector2.One, ResourceManager.Get<Texture2D>("mountainsStoreTile"));
+            
 
-            GameObject test = new GameObject();
+            systemManager.Add(canvas.Create());
+
+
+
+            GameObject test = new GameObject(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
 
             test.Add(new Sprite(ResourceManager.Get<Texture2D>("mountainsStoreTile"), Color.White, 1.0f, true));
-            test.Add(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
             systemManager.Add(test);
         }
     }

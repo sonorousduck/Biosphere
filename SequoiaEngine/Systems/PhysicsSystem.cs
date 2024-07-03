@@ -77,7 +77,7 @@ namespace SequoiaEngine
                 {
                     if (HasCollision(gameObjects[id], gameObject))
                     {
-                        if (!rb.currentlyCollidingWith.Contains(gameObject.id)) // First frame of colliding
+                        if (!rb.currentlyCollidingWith.Contains(gameObject.Id)) // First frame of colliding
                         {
                             if (gameObjects[id].ContainsComponentOfParentType<Script>())
                             {
@@ -92,7 +92,7 @@ namespace SequoiaEngine
                     }
                     else
                     {
-                        if (rb.currentlyCollidingWith.Contains(gameObject.id)) // We used to be colliding with this
+                        if (rb.currentlyCollidingWith.Contains(gameObject.Id)) // We used to be colliding with this
                         {
                             if (gameObjects[id].ContainsComponentOfParentType<Script>())
                             {

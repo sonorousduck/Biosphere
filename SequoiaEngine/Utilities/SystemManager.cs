@@ -55,7 +55,7 @@ namespace SequoiaEngine
         /// </summary>
         public void Remove(GameObject gameObject)
         {
-            toRemoveObjects.Enqueue(gameObject.id);
+            toRemoveObjects.Enqueue(gameObject.Id);
         }
 
         public void Start()
@@ -121,7 +121,7 @@ namespace SequoiaEngine
 
         private void AddObject(GameObject gameObject)
         {
-            gameObjectsDictionary.Add(gameObject.id, gameObject);
+            gameObjectsDictionary.Add(gameObject.Id, gameObject);
             AddGameObject?.Invoke(gameObject);
         }
 

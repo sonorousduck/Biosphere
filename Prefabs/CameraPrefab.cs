@@ -13,12 +13,12 @@ namespace Biosphere
     {
         public static GameObject Create()
         {
-            GameObject camera = new GameObject();
+            GameObject camera = new GameObject(new Transform(Vector2.Zero, 0, Vector2.One));
 
-            float maxZoomBounds = 5f;
-            float minZoomBounds = 0.5f;
+            float maxZoomBounds = 2.5f;
+            float minZoomBounds = 1f;
 
-            float zoomSpeed = 2f;
+            float zoomSpeed = 0.25f;
             float movementAmount = 200f;
 
 
@@ -29,7 +29,6 @@ namespace Biosphere
 
 
 
-            camera.Add(new Transform(Vector2.Zero, 0, Vector2.One));
             camera.Add(new Rigidbody());
             camera.Add(new CircleCollider(1, false));
 
@@ -37,10 +36,13 @@ namespace Biosphere
             KeyboardInput keyboardInput = new KeyboardInput();
             keyboardInput.RegisterOnHeldAction("moveCameraUp", () =>
             {
-                if (GameManager.Instance.Camera.Position.Y >= minCameraY)
-                {
-                    camera.GetComponent<Transform>().position += new Vector2(0f, movementAmount) * GameManager.Instance.ElapsedMicroseconds;
-                    GameManager.Instance.Camera.Move(new Vector2(0f, -movementAmount) * GameManager.Instance.ElapsedMicroseconds);
+            if (GameManager.Instance.Camera.Position.Y >= minCameraY)
+            {
+                    Vector2 movement = new Vector2(0f, -movementAmount) * GameManager.Instance.ElapsedMicroseconds;
+                    movement.Round();
+
+                    GameManager.Instance.Camera.Move(movement);
+                    camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }
                 
             });
@@ -49,8 +51,12 @@ namespace Biosphere
             {
                 if (GameManager.Instance.Camera.Position.Y <= maxCameraY)
                 {
-                    camera.GetComponent<Transform>().position += new Vector2(0f, -movementAmount) * GameManager.Instance.ElapsedMicroseconds;
-                    GameManager.Instance.Camera.Move(new Vector2(0f, movementAmount) * GameManager.Instance.ElapsedMicroseconds);
+                    Vector2 movement = new Vector2(0f, movementAmount) * GameManager.Instance.ElapsedMicroseconds;
+                    movement.Round();
+
+
+                    GameManager.Instance.Camera.Move(movement);
+                    camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }
 
             });
@@ -60,8 +66,10 @@ namespace Biosphere
                 Console.WriteLine(GameManager.Instance.Camera.Position.ToString());
                 if (GameManager.Instance.Camera.Position.X >= minCameraX)
                 {
-                    camera.GetComponent<Transform>().position += new Vector2(-movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds;
-                    GameManager.Instance.Camera.Move(new Vector2(-movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds);
+                    Vector2 movement = new Vector2(-movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds;
+                    movement.Round();
+                    GameManager.Instance.Camera.Move(movement);
+                    camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }
             });
 
@@ -70,8 +78,10 @@ namespace Biosphere
             {
                 if (GameManager.Instance.Camera.Position.X <= maxCameraX)
                 {
-                    camera.GetComponent<Transform>().position += new Vector2(movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds;
-                    GameManager.Instance.Camera.Move(new Vector2(movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds);
+                    Vector2 movement = new Vector2(movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds;
+                    movement.Round();
+                    GameManager.Instance.Camera.Move(movement);
+                    camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }
             });
 
@@ -87,17 +97,17 @@ namespace Biosphere
             MouseInput mouseInput = new MouseInput();
             mouseInput.RegisterOnPressAction("zoomOut", () =>
             {
-                GameManager.Instance.Camera.ZoomOut(zoomSpeed * GameManager.Instance.ElapsedMicroseconds);
+                float zoomOutAmount = zoomSpeed;
                 GameManager.Instance.Camera.MaximumZoom = maxZoomBounds;
                 GameManager.Instance.Camera.MinimumZoom = minZoomBounds;
+                GameManager.Instance.Camera.ZoomOut(zoomSpeed);
             });
 
             mouseInput.RegisterOnPressAction("zoomIn", () =>
             {
-                GameManager.Instance.Camera.ZoomIn(zoomSpeed * GameManager.Instance.ElapsedMicroseconds);
                 GameManager.Instance.Camera.MaximumZoom = maxZoomBounds;
                 GameManager.Instance.Camera.MinimumZoom = minZoomBounds;
-
+                GameManager.Instance.Camera.ZoomIn(zoomSpeed);
             });
 
             mouseInput.RegisterOnHeldAction("zoomOut", () =>

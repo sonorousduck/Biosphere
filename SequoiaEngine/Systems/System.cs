@@ -100,7 +100,7 @@ namespace SequoiaEngine
         {
             if (IsInterested(gameObject))
             {
-                gameObjects.Add(gameObject.id, gameObject);
+                gameObjects.Add(gameObject.Id, gameObject);
             }
         }
 
