@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using SequoiaEngine.Utilities;
 
@@ -7,16 +8,49 @@ namespace SequoiaEngine
 {
     public class PhysicsSystem : System
     {
-        public static int PHYSICS_DIMENSION_WIDTH = 2000;
-        public static int PHYSICS_DIMENSION_HEIGHT = 2000; // These should match up with rendering
-        public static float GRAVITY = -9.81f;
+        /*        public static int PHYSICS_DIMENSION_WIDTH = 2000;
+                public static int PHYSICS_DIMENSION_HEIGHT = 2000; // These should match up with rendering
+                public static float GRAVITY = -9.81f;*/
 
-        private Quadtree quadtree;
-        private Quadtree staticTree;
+        /*        private Quadtree quadtree;
+                private Quadtree staticTree;*/
+
+
+        public const float GRAVITY_CONST = -9.81f;
+
+        private Grid grid;
+        private Grid staticGrid;
+
+        public Vector2 Dimensions;
+        public Vector2 GridSize;
+        public Vector2 GridStartPosition;
+
 
         public PhysicsSystem(SystemManager systemManager) : base(systemManager, typeof(Transform), typeof(Rigidbody), typeof(Collider))
         {
-            staticTree = new Quadtree(PHYSICS_DIMENSION_WIDTH, PHYSICS_DIMENSION_HEIGHT);
+            //staticTree = new Quadtree(PHYSICS_DIMENSION_WIDTH, PHYSICS_DIMENSION_HEIGHT);
+            Dimensions = new Vector2(2000, 2000);
+            GridSize = new Vector2(16, 16);
+            GridStartPosition = new Vector2(-500, -500);
+
+            grid = new Grid(GridStartPosition, Dimensions, GridSize, false);
+            staticGrid = new Grid(GridStartPosition, Dimensions, GridSize, true);
+        }
+
+        public PhysicsSystem(SystemManager systemManager, Vector2 dimensions, Vector2 gridSize) : base(systemManager, typeof(Transform), typeof(Rigidbody), typeof(Collider))
+        {
+            //staticTree = new Quadtree(PHYSICS_DIMENSION_WIDTH, PHYSICS_DIMENSION_HEIGHT);
+            Dimensions = dimensions;
+            GridSize = gridSize;
+            GridStartPosition = new Vector2(-10, -10);
+        }
+
+        public PhysicsSystem(SystemManager systemManager, Vector2 dimensions, Vector2 gridSize, Vector2 gridStartPos) : base(systemManager, typeof(Transform), typeof(Rigidbody), typeof(Collider))
+        {
+            //staticTree = new Quadtree(PHYSICS_DIMENSION_WIDTH, PHYSICS_DIMENSION_HEIGHT);
+            Dimensions = dimensions;
+            GridSize = gridSize;
+            GridStartPosition = gridStartPos;
         }
 
 
@@ -26,7 +60,11 @@ namespace SequoiaEngine
 
             if (gameObject.ContainsComponentOfParentType<Collider>() && gameObject.GetComponent<Collider>().isStatic)
             {
-                staticTree.Insert(gameObject);
+                staticGrid.Insert(gameObject);
+            }
+            else if (gameObject.ContainsComponentOfParentType<Collider>())
+            {
+                grid.Insert(gameObject);
             }
         }
 
@@ -37,73 +75,106 @@ namespace SequoiaEngine
         /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
         {
-            quadtree = new Quadtree(PHYSICS_DIMENSION_WIDTH, PHYSICS_DIMENSION_HEIGHT);
+            if (gameObjects.Count == 0) return; // i.e. we don't want to have to do the work to clear the grid everytime if we don't have to
 
-            // add everything into the quadtree
+            grid.Clear();
+
             foreach ((uint id, GameObject gameObject) in gameObjects)
             {
+                if (!gameObject.IsEnabled()) return;
+
                 Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+                Transform transform = gameObject.GetComponent<Transform>();
+                Collider genericCollider = gameObject.GetComponent<Collider>();
+                transform.previousPosition = transform.position;
 
                 if (rb.usesGravity)
                 {
-                    // Update velocity from gravity
-                    rb.velocity += new Vector2(0, GRAVITY * (GameManager.Instance.ElapsedMicroseconds) * rb.gravityScale);
-
+                    rb.velocity += new Vector2(0, GRAVITY_CONST * (GameManager.Instance.ElapsedMicroseconds) * rb.gravityScale);
                 }
-                Transform transform = gameObjects[id].GetComponent<Transform>();
 
-                // Update velocity from accleration as well
                 rb.velocity += new Vector2(rb.acceleration.X * GameManager.Instance.ElapsedMicroseconds, rb.acceleration.Y * MathF.Pow(GameManager.Instance.ElapsedMicroseconds, 2f));
 
-                transform.previousPosition = transform.position;
-                // Update position from velocity
-                transform.position += rb.velocity * (GameManager.Instance.ElapsedMicroseconds);
-                quadtree.Insert(gameObject);
+                transform.position += rb.velocity * GameManager.Instance.ElapsedMicroseconds;
+
+                while (rb.ScriptedMovementLength() > 0)
+                {
+                    Vector2 scriptedMovement = rb.GetNextScriptedMovement();
+                    transform.position += scriptedMovement;
+                }
+
+                if (!genericCollider.isStatic)
+                {
+                    grid.Insert(gameObject);
+                }
+                else if (staticGrid.ShouldRebuild)
+                {
+                    staticGrid.Insert(gameObject);
+                }
             }
 
+            staticGrid.ShouldRebuild = false;
 
-            foreach (uint id in gameObjects.Keys)
+
+            foreach ((uint id, GameObject gameObject) in gameObjects)
             {
-                Rigidbody rb = gameObjects[id].GetComponent<Rigidbody>(); // No need for null check here, by nature of being in physics engine, there is one
+                if (!gameObject.IsEnabled()) return;
 
-                List<GameObject> possibleCollisions = quadtree.GetPossibleCollisions(gameObjects[id]);
-                List<GameObject> possibleStaticCollisions = staticTree.GetPossibleCollisions(gameObjects[id]);
-                List<uint> currentCollisions = new List<uint>();
+                UpdateGameObject(gameObject);
 
-                possibleCollisions.AddRange(possibleStaticCollisions);
+            }
+
+        }
 
 
-                foreach (GameObject gameObject in possibleCollisions)
+        private void UpdateGameObject(GameObject gameObject)
+        {
+            HashSet<GameObject> possibleCollisions = grid.GetPossibleCollisions(ref gameObject);
+            possibleCollisions.UnionWith(staticGrid.GetPossibleCollisions(ref gameObject));
+
+            Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+
+            List<uint> collisionsThisFrame = new();
+
+
+
+            foreach (GameObject possibleCollision in possibleCollisions)
+            {
+                if (HasCollision(gameObject, possibleCollision))
                 {
-                    if (HasCollision(gameObjects[id], gameObject))
+                    collisionsThisFrame.Add(possibleCollision.Id);
+                    // On Collision Start
+                    if (!rb.currentlyCollidingWith.Contains(possibleCollision.Id))
                     {
-                        if (!rb.currentlyCollidingWith.Contains(gameObject.Id)) // First frame of colliding
+                        if (gameObject.ContainsComponentOfParentType<Script>())
                         {
-                            if (gameObjects[id].ContainsComponentOfParentType<Script>())
-                            {
-                                gameObjects[id].GetComponent<Script>().OnCollisionStart(gameObject);
-                            }
-
-                        }
-                        if (gameObjects[id].ContainsComponentOfParentType<Script>())
-                        {
-                            gameObjects[id].GetComponent<Script>().OnCollision(gameObject);
+                            gameObject.GetComponent<Script>().OnCollisionStart(possibleCollision);
                         }
                     }
-                    else
+                    else // On Collision
                     {
-                        if (rb.currentlyCollidingWith.Contains(gameObject.Id)) // We used to be colliding with this
+                        if (gameObject.ContainsComponentOfParentType<Script>())
                         {
-                            if (gameObjects[id].ContainsComponentOfParentType<Script>())
-                            {
-                                gameObjects[id].GetComponent<Script>().OnCollisionEnd(gameObject);
-                            }
+                            gameObject.GetComponent<Script>().OnCollision(possibleCollision);
                         }
                     }
                 }
-                rb.currentlyCollidingWith = currentCollisions;
+                else // On Collision End
+                {
+                    if (rb.currentlyCollidingWith.Contains(possibleCollision.Id))
+                    {
+                        if (gameObject.ContainsComponentOfParentType<Script>())
+                        {
+                            gameObject.GetComponent<Script>().OnCollisionEnd(possibleCollision);
+                        }
+                    }
+                }
             }
+
+            rb.currentlyCollidingWith = collisionsThisFrame;
+
         }
+
 
         private bool HasCollision(GameObject one, GameObject two)
         {

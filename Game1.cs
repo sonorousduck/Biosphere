@@ -5,6 +5,7 @@ using MonoGame.Extended.Screens;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 
 namespace Biosphere
@@ -72,12 +73,7 @@ namespace Biosphere
 
         private void OnWindowResize(object sender, EventArgs e)
         {
-            /*            _graphics.PreferredBackBufferWidth = _graphics.GraphicsDevice.Viewport.Width;
-                        _graphics.PreferredBackBufferHeight = _graphics.GraphicsDevice.Viewport.Height;
-                        _graphics.ApplyChanges();*/
-
             gameManager.UpdateWidthHeight(_graphics.GraphicsDevice.Viewport.Width, _graphics.GraphicsDevice.Viewport.Height);
-            
         }
 
         protected override void LoadContent()
@@ -105,8 +101,8 @@ namespace Biosphere
             gameManager.Update(gameTime);
             inputManager.Update();
             // Diplays FPS
-            /*            Debug.WriteLine(1 / gameTime.ElapsedGameTime.TotalSeconds);
-            */
+            //Debug.WriteLine(1 / gameTime.ElapsedGameTime.TotalSeconds);
+
 
             if (newScreenFocused)
             {

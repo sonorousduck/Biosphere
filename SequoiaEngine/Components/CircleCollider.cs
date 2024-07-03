@@ -12,6 +12,7 @@ namespace SequoiaEngine
             offset = new Vector2(xOffset, yOffset);
             this.isStatic = isStatic;
             this.radius = radius;
+
         }
     }
 }

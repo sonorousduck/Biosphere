@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace SequoiaEngine
 {
-    public class Button : Component
+    public class ButtonComponent : Component
     {
 
-        Action onPress;
+        public Action OnPress;
+        public Action OnRelease;
 
         public string SpriteImageUnpressedPath;
         public string SpriteImagePressedPath;
@@ -19,6 +20,8 @@ namespace SequoiaEngine
         public Texture2D SpriteImageUnpressed = null;
         public Texture2D SpriteImagePressed = null;
         public Texture2D SpriteImageHover = null;
+
+        public AnchorLocation AnchorLocation;
 
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace SequoiaEngine
 
 
 
-        public Button(string spriteImageUnpressedPath = "", string spriteImagePressedPath = "", string spriteImageHoverPath = "")
+        public ButtonComponent(string spriteImageUnpressedPath = "", string spriteImagePressedPath = "", string spriteImageHoverPath = "", bool toggleModeActive = false, Action onPress = null, Action onRelease = null)
         {
             if (spriteImageUnpressedPath != "")
             {
@@ -51,13 +54,20 @@ namespace SequoiaEngine
                 SpriteImageHover = ResourceManager.Manager.Load<Texture2D>(spriteImageHoverPath);
                 this.SpriteImageHoverPath = spriteImageHoverPath;
             }
+
+            this.ToggleMode = toggleModeActive;
+            this.OnPress = onPress;
+            this.OnRelease = onRelease;
         }
 
-        public Button(Texture2D spriteImageUnpressed = null, Texture2D spriteImagePressed = null, Texture2D spriteImageHover = null)
+        public ButtonComponent(Texture2D spriteImageUnpressed = null, Texture2D spriteImagePressed = null, Texture2D spriteImageHover = null, bool toggleModeActive = false, Action onPress = null, Action onRelease = null)
         {
             SpriteImageUnpressed = spriteImageUnpressed;
             SpriteImagePressed = spriteImagePressed;
             SpriteImageHover = spriteImageHover;
+            this.ToggleMode = toggleModeActive;
+            this.OnPress = onPress;
+            this.OnRelease = onRelease;
         }
 
     }

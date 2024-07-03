@@ -33,11 +33,31 @@ namespace Biosphere
 
         public override void Update(GameTime gameTime)
         {
-
-
             transform.position = GameManager.Instance.Camera.ScreenToWorld(InputManager.Instance.MousePositionState.Position);
 
             //transform.position = camera.ScreenToWorld(test);
+        }
+
+        public override void OnCollisionStart(GameObject other)
+        {
+            base.OnCollisionStart(other);
+
+            if (other != null)
+            {
+                other.GetComponent<RectangleCollider>().IsColliding = true;
+                Debug.WriteLine(other.Tag);   
+            }
+
+        }
+
+        public override void OnCollisionEnd(GameObject other)
+        {
+            base.OnCollisionEnd(other);
+
+            if (other != null)
+            {
+                other.GetComponent<RectangleCollider>().IsColliding = false;
+            }
         }
     }
 }

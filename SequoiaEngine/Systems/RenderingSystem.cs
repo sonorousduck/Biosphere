@@ -53,7 +53,8 @@ namespace SequoiaEngine
                         (int)animatedSprite.singleFrameSize.Y), 
                         Color.White, transform.rotation, 
                         animatedSprite.singleFrameSize / 2, 
-                        transform.scale, SpriteEffects.None, 
+                        transform.scale, 
+                        SpriteEffects.None, 
                         gameObjects[id].GetComponent<AnimatedSprite>().renderDepth
                         );
                 }
@@ -109,10 +110,16 @@ namespace SequoiaEngine
                     {
                         Texture2D boxTexture = ResourceManager.Get<Texture2D>("box");
                         Vector2 offset = gameObjects[id].GetComponent<RectangleCollider>().offset;
-                        spriteBatch.Draw(boxTexture, renderPosition + offset, null,
-                        Color.Green, gameObjects[id].GetComponent<Transform>().rotation,
-                        new Vector2(boxTexture.Width, boxTexture.Height) / 2f, new Vector2(2f / boxTexture.Width * (rectangleCollider.size.X / 2), 2f / boxTexture.Height * (rectangleCollider.size.Y / 2)),
-                        SpriteEffects.None, 0);
+                        spriteBatch.Draw(
+                            boxTexture, 
+                            renderPosition + offset, 
+                            null,
+                            rectangleCollider.IsColliding ? Color.Green : Color.Red, 
+                            gameObjects[id].GetComponent<Transform>().rotation,
+                            new Vector2(boxTexture.Width, boxTexture.Height) / 2f, 
+                            new Vector2(2f / boxTexture.Width * (rectangleCollider.size.X / 2), 2f / boxTexture.Height * (rectangleCollider.size.Y / 2)),
+                            SpriteEffects.None, 
+                            0.5f);
                     }
                 }
             }

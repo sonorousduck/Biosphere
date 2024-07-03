@@ -10,6 +10,8 @@ namespace SequoiaEngine
         public Vector2 scale;
         public Vector2 previousPosition;
 
+        public bool IsHUD = false;
+
         public Transform()
         {
             this.position = Vector2.Zero;
@@ -18,12 +20,13 @@ namespace SequoiaEngine
             this.previousPosition = Vector2.Zero;
         }
 
-        public Transform(Vector2 position, float rotation, Vector2 scale)
+        public Transform(Vector2 position, float rotation, Vector2 scale, bool isHUD = false)
         {
             this.position = position;
             this.rotation = rotation;
             this.scale = scale;
             this.previousPosition = position;
+            this.IsHUD = isHUD;
         }
     }
 }

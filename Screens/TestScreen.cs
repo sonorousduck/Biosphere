@@ -4,11 +4,9 @@ using System;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
 using SequoiaEngine;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Particles;
-using MonoGame.Extended.Particles.Modifiers.Containers;
 using MonoGame.Extended.Particles.Modifiers.Interpolators;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
@@ -60,10 +58,6 @@ namespace Biosphere
 
             camera = CameraPrefab.Create();
 
-/*            camera = new GameObject();
-            camera.Add(new Transform(Vector2.Zero, 0, Vector2.One));
-            camera.Add(new Rigidbody());
-            camera.Add(new CircleCollider(1, false));*/
             mainRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             tileRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             hudRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
@@ -135,9 +129,12 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/NewTileLocation", "newTileLocation");
             ResourceManager.Load<Texture2D>("Sprites/PlainsStoreTile", "plainsStoreTile");
             ResourceManager.Load<Texture2D>("Sprites/PlainsTemp", "plainsTemp");
+            ResourceManager.Load<Texture2D>("Sprites/box", "box");
+            ResourceManager.Load<Texture2D>("Sprites/circle", "circle");
 
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
+            renderingSystem.debugMode = true;
             fontRenderingSystem = new FontRenderingSystem(systemManager, camera);
             //lightRenderer = new LightRenderingSystem(systemManager, camera, graphicsDevice);
             //lightRenderer.globalLightLevel = 0f;
@@ -231,18 +228,26 @@ namespace Biosphere
 
             systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
 
-
-            Canvas canvas = new Canvas(Vector2.Zero, 0, Vector2.One, ResourceManager.Get<Texture2D>("mountainsStoreTile"));
-            
-
-            systemManager.Add(canvas.Create());
-
+            Action onButtonPress = () =>
+            {
+                Debug.WriteLine("Pressed Button!");
+            };
 
 
-            GameObject test = new GameObject(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
+            Canvas canvas = new Canvas(new Vector2(200, 200), 0, Vector2.One, ResourceManager.Get<Texture2D>("mountainsStoreTile"));
+            Canvas canvasTest = new Canvas(new Vector2(0, 0), 0, Vector2.One, ResourceManager.Get<Texture2D>("cursor"), AnchorLocation.MiddleLeft, ScaleSize.None, canvas.GameObject);
+            Button button = new Button(new Vector2(0, 0), 0, Vector2.One, "newTileLocation", anchorLocation: AnchorLocation.MiddleRight, parent: canvas.GameObject, onPress: onButtonPress, tag: "TestButton");
 
-            test.Add(new Sprite(ResourceManager.Get<Texture2D>("mountainsStoreTile"), Color.White, 1.0f, true));
-            systemManager.Add(test);
+            systemManager.Add(canvasTest.GameObject);
+            systemManager.Add(canvas.GameObject);
+            systemManager.Add(button.GameObject);
+
+
+
+            //GameObject test = new(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
+
+            //test.Add(new Sprite(ResourceManager.Get<Texture2D>("mountainsStoreTile"), Color.White, 1.0f, true));
+            //systemManager.Add(test);
         }
     }
 }

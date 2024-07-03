@@ -14,33 +14,40 @@ namespace SequoiaEngine
 
         private static uint nextId = 0;
 
+        public string Tag { get; private set; } = "";
+
         public uint Id { get; private set; }
+
+        private bool enabled = true;
 
         private List<GameObject> children;
         private GameObject parent;
 
-        public GameObject()
+        public GameObject(string tag = "")
         {
             Id = nextId++;
             children = new List<GameObject>();
+            this.Tag = tag;
 
             Transform defaultTransform = new();
             this.Add(defaultTransform);
         }
 
-        public GameObject(GameObject parent) : this()
+        public GameObject(GameObject parent, string tag = "") : this()
         {
             this.parent = parent;
+            this.Tag = tag;
         }
 
-        public GameObject(Transform transform)
+        public GameObject(Transform transform, GameObject parent = null, string tag = "")
         {
             Id = nextId++;
             children = new List<GameObject>();
 
             this.Add(transform);
+            this.parent = parent;
+            this.Tag = tag;
         }
-
 
         // Return the number of children present on the game object
         public int GetChildrenCount()
@@ -48,6 +55,21 @@ namespace SequoiaEngine
             return children.Count; 
         }
 
+
+        public void Disable()
+        {
+            this.enabled = false;
+        }
+
+        public void Enable()
+        {
+            this.enabled = true; 
+        }
+
+        public bool IsEnabled()
+        {
+            return this.enabled;
+        }
 
         /// <summary>
         /// Used to get all registered children of the Game Object. This is (most likely) a precursor to just using a Scene Graph
@@ -63,6 +85,11 @@ namespace SequoiaEngine
         /// <returns></returns>
         public GameObject GetParent()
         {
+            if (parent == null)
+            {
+                return null;
+            }
+
             return parent;
         }
 

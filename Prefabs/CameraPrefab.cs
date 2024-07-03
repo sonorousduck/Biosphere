@@ -30,7 +30,7 @@ namespace Biosphere
 
 
             camera.Add(new Rigidbody());
-            camera.Add(new CircleCollider(1, false));
+            //camera.Add(new CircleCollider(1, false));
 
 
             KeyboardInput keyboardInput = new KeyboardInput();
