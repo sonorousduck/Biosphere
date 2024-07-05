@@ -131,6 +131,7 @@ namespace SequoiaEngine
 
             RectangleCollider collider = new RectangleCollider(this.GameObject.GetComponent<Transform>().scale * this.GameObject.GetComponent<Sprite>()?.size ?? Vector2.One, false);
             collider.LayersToCollideWith = CollisionLayer.UI;
+            collider.IsHud = true;
             GameObject.Add(collider);
 
             GameObject.Add(new Rigidbody());

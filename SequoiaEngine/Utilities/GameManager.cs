@@ -27,8 +27,12 @@ namespace SequoiaEngine
         public int RenderWidth;
         public int RenderHeight;
 
+        public Vector2 RenderWindowSize;
+
         public int ActualWidth = 0;
         public int ActualHeight = 0;
+
+        public Vector2 ActualWindowSize;
 
         public Rectangle DestinationRectangle { get; private set; }
 
@@ -43,6 +47,8 @@ namespace SequoiaEngine
             this.GameWindow = window;
             this.RenderWidth = renderWidth;
             this.RenderHeight = renderHeight;
+
+            RenderWindowSize = new Vector2(RenderWidth, RenderHeight);
         }
 
         public void Initialize(GraphicsDevice graphicsDevice)
@@ -56,6 +62,8 @@ namespace SequoiaEngine
         {
             this.ActualWidth = width;
             this.ActualHeight = height;
+
+            ActualWindowSize = new Vector2(width, height);
 
             float scaleX = (float)width / RenderWidth;
             float scaleY = (float)height / RenderHeight;

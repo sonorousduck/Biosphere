@@ -80,11 +80,11 @@ namespace SequoiaEngine
             grid.Resize(GridAmount);
         }
 
-        public HashSet<GameObject> GetPossibleCollisions(ref GameObject entity)
+        public HashSet<GameObject> GetPossibleCollisions(ref GameObject entity, bool isHud = false)
         {
             HashSet<GameObject> results = new HashSet<GameObject>();
 
-            GetPossibleCollisions(entity, ref results);
+            GetPossibleCollisions(entity, ref results, isHud);
 
             return results;
         }
@@ -92,7 +92,7 @@ namespace SequoiaEngine
 
 
 
-        private void GetPossibleCollisions(GameObject entity, ref HashSet<GameObject> results)
+        private void GetPossibleCollisions(GameObject entity, ref HashSet<GameObject> results, bool isHud)
         {
             Transform transform = entity.GetComponent<Transform>();
             Collider collider = entity.GetComponent<Collider>();
@@ -114,6 +114,15 @@ namespace SequoiaEngine
 
             Vector2 position = transform.position + centerOfCollider;
             Vector2 endPosition = position + colliderSize;
+
+
+            // If the collider is not HUD, but we are looking for HUD elements, we need to transform it from world space to screen space
+            if (!collider.IsHud && isHud)
+            {
+                position = (GameManager.Instance.Camera.WorldToScreen(position) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
+                endPosition = (GameManager.Instance.Camera.WorldToScreen(endPosition) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
+            }
+
 
             int startColumn = (int)((position.X - this.Position.X) / SizeOfGridUnit.X);
             int endColumn = (int)((endPosition.X - this.Position.X) / SizeOfGridUnit.X);
@@ -138,8 +147,6 @@ namespace SequoiaEngine
                     for (int i = 0; i < grid[indexPosition].Count; i++)
                     {
                         GameObject possibleCollisions = grid[indexPosition][i];
-
-                        bool test = possibleCollisions != entity;
 
                         if ((possibleCollisions.GetComponent<Collider>().Layer & entityLayer) != 0 && possibleCollisions != entity)
                         {

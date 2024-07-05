@@ -22,6 +22,7 @@ namespace SequoiaEngine
     public abstract class Collider : Component
     {
         public bool isStatic;
+        public bool IsHud;
         public Vector2 offset;
 
 
