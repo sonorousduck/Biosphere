@@ -20,7 +20,7 @@ namespace SequoiaEngine
 
                 Animated animated = gameObject.GetComponent<Animated>();
 
-                if (animated.IsStarted)
+                if (animated.IsStarted && !animated.IsFinished)
                 {
                     animated.OnUpdate?.Invoke(GameManager.Instance.ElapsedMicroseconds);
                 }

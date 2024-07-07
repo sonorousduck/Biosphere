@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,6 +27,9 @@ namespace SequoiaEngine
         public Texture2D ButtonOpenTexture;
 
         public bool IsDrawerOpen;
+
+        public Vector2 DestinationLocationAnimated;
+        public Vector2 ClosedPosition;
         public string Tag { get; private set; }
 
         public GameObject GameObject { get; private set; }
@@ -54,6 +58,7 @@ namespace SequoiaEngine
             this.Parent = parent;
             this.Tag = tag;
             this.IsDrawerOpen = true;
+            this.DestinationLocationAnimated = new Vector2();
 
             Setup();
 
@@ -67,8 +72,6 @@ namespace SequoiaEngine
                 {
                     Close();
                 }
-
-                IsDrawerOpen = !IsDrawerOpen;
             };
 
 
@@ -111,6 +114,60 @@ namespace SequoiaEngine
                 GameObject.GetComponent<Transform>().scale *= scale.GetScaleModifier(GameObject);
             }
 
+            Dictionary<string, Component> test = new Dictionary<string, Component>()
+            {
+                {"transform", GameObject.GetComponent<Transform>()}
+            };
+
+            Action onStart = () =>
+            {
+                if (IsDrawerOpen)
+                {
+                    DestinationLocationAnimated = ClosedPosition;
+                }
+                else
+                {
+                    DestinationLocationAnimated = this.Position;
+                }
+
+                Animated animated = GameObject.GetComponent<Animated>();
+                
+            };
+
+
+            Action<float> updatedAnimatedComponent = (float deltaTime) =>
+            {
+                if (IsDrawerOpen)
+                {
+                    Transform transform = GameObject.GetComponent<Transform>();
+                    Animated animated = GameObject.GetComponent<Animated>();
+                    Vector2 test = (this.Position - this.DestinationLocationAnimated);
+                    float scale = Math.Clamp(((animated.AnimationTime + deltaTime) / animated.MaxAnimationTime), 0, 1);
+
+                    transform.position = scale * (this.DestinationLocationAnimated) + (1 - scale) * Position;
+                }
+                else
+                {
+                    Transform transform = GameObject.GetComponent<Transform>();
+                    Animated animated = GameObject.GetComponent<Animated>();
+                    float scale = Math.Clamp(((animated.AnimationTime + deltaTime) / animated.MaxAnimationTime), 0, 1);
+
+                    transform.position = scale * (this.DestinationLocationAnimated) + (1 - scale) * ClosedPosition;
+                }
+                button.AdjustLocation();
+            };
+
+            Action onFinished = () =>
+            {
+                this.IsDrawerOpen = !this.IsDrawerOpen;
+            };
+
+
+            Animated animated = new Animated(0.25f, onStart: onStart, onUpdate: updatedAnimatedComponent, onFinished, extraData: test);
+            GameObject.Add(animated);
+
+            ClosedPosition = new Vector2(-GameObject.GetComponent<Sprite>().size.X / 2f + 10f, this.Position.Y);
+
         }
 
         public void AddSubcomponentsToSystemManager(SystemManager systemManager)
@@ -120,20 +177,22 @@ namespace SequoiaEngine
 
         public void Close()
         {
-            GameObject.GetComponent<Transform>().scale = new Vector2(0f, 0f);
-            GameObject.GetComponent<Transform>().position = new Vector2(0f, 0f);
+            //GameObject.GetComponent<Transform>().scale = new Vector2(0f, 0f);
+            //GameObject.GetComponent<Transform>().position = new Vector2(0f, 0f);
+            GameObject.GetComponent<Animated>().OnStart?.Invoke();
             button.GameObject.GetComponent<Sprite>().sprite = ButtonOpenTexture;
-            button.AdjustLocation();
+            //button.AdjustLocation();
 
         }
 
         public void Open()
         {
-            GameObject.GetComponent<Transform>().scale = new Vector2(1f, 1f);
-            GameObject.GetComponent<Transform>().position = this.Position;
+            //GameObject.GetComponent<Transform>().scale = new Vector2(1f, 1f);
+            //GameObject.GetComponent<Transform>().position = this.Position;
+            GameObject.GetComponent<Animated>().OnStart?.Invoke();
             button.GameObject.GetComponent<Sprite>().sprite = ButtonClosedTexture;
 
-            button.AdjustLocation();    
+            //button.AdjustLocation();    
         }
 
 

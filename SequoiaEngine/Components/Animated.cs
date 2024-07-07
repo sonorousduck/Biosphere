@@ -19,14 +19,17 @@ namespace SequoiaEngine
         public float AnimationTime;
         public float MaxAnimationTime;
 
+        public Dictionary<string, Component> ExtraData;
 
 
-        public Animated(float animationTime, Action onStart, Action<float> onUpdate, Action onEnd = null) 
+
+        public Animated(float animationTime, Action onStart = null, Action<float> onUpdate = null, Action onEnd = null, Dictionary<string, Component> extraData = null) 
         {
-            this.AnimationTime = animationTime;
+            this.AnimationTime = 0f;
             this.MaxAnimationTime = animationTime;
             this.OnStart = onStart;
             this.OnStart += OnBegin;
+            this.ExtraData = extraData;
 
 
             if (onEnd == null)
@@ -48,11 +51,14 @@ namespace SequoiaEngine
         public void OnBegin()
         {
             this.IsStarted = true;
+            this.IsFinished = false;
+            this.AnimationTime = 0f;
         }
 
         public void OnFinish()
         {
             this.IsFinished = true;
+            this.IsStarted = false;
         }
 
         public void Restart()
@@ -66,12 +72,15 @@ namespace SequoiaEngine
 
         public void Update(float deltaTime)
         {
-            this.AnimationTime -= deltaTime;
+            if (this.IsFinished) return;
+            this.AnimationTime += deltaTime;
 
-            if (this.AnimationTime < 0)
+            if (this.AnimationTime >= MaxAnimationTime)
             {
                 this.OnEnd?.Invoke();
             }
+
+
         }
 
     }
