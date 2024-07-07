@@ -21,8 +21,8 @@ namespace Biosphere
         private SequoiaEngine.Screen currentScreen;
         private ScreenEnum nextScreen;
         private bool newScreenFocused;
-        const int VIRTUAL_WIDTH = 480;
-        const int VIRTUAL_HEIGHT = 270; // Aspect ratio of 16:9
+        const int VIRTUAL_WIDTH = 640;
+        const int VIRTUAL_HEIGHT = 360; // Aspect ratio of 16:9
 
         InputManager inputManager;
         InputConfig inputConfig;

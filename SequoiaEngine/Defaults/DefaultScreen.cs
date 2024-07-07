@@ -50,8 +50,8 @@ namespace SequoiaEngine
             camera.Add(new MouseInput());
             camera.Add(new CameraScript(camera));
             particleSystem = new ParticleSystem(systemManager);
-            mainRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            tileRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            mainRenderTarget = new RenderTarget2D(graphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            tileRenderTarget = new RenderTarget2D(graphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
 
             systemManager.Add(camera);
         }

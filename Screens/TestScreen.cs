@@ -58,9 +58,9 @@ namespace Biosphere
 
             camera = CameraPrefab.Create();
 
-            mainRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            tileRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            hudRenderTarget = new RenderTarget2D(graphicsDevice, 480, 270, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            mainRenderTarget = new RenderTarget2D(graphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            tileRenderTarget = new RenderTarget2D(graphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
+            hudRenderTarget = new RenderTarget2D(graphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, graphics.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
             systemManager.Add(camera);
         }
 
@@ -130,11 +130,13 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/PlainsStoreTile", "plainsStoreTile");
             ResourceManager.Load<Texture2D>("Sprites/PlainsTemp", "plainsTemp");
             ResourceManager.Load<Texture2D>("Sprites/box", "box");
-            ResourceManager.Load<Texture2D>("Sprites/circle", "circle");
+            ResourceManager.Load<Texture2D>("Sprites/UI/CloseDrawer", "closeDrawer");
+            ResourceManager.Load<Texture2D>("Sprites/UI/OpenDrawer", "openDrawer");
+            ResourceManager.Load<Texture2D>("Sprites/UI/LeftSideDrawer", "leftSideDrawer");
 
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
-            renderingSystem.debugMode = true;
+            //renderingSystem.debugMode = true;
             fontRenderingSystem = new FontRenderingSystem(systemManager, camera);
             //lightRenderer = new LightRenderingSystem(systemManager, camera, graphicsDevice);
             //lightRenderer.globalLightLevel = 0f;
@@ -236,11 +238,19 @@ namespace Biosphere
 
             Canvas canvas = new Canvas(new Vector2(200, 200), 0, Vector2.One, ResourceManager.Get<Texture2D>("mountainsStoreTile"));
             Canvas canvasTest = new Canvas(new Vector2(0, 0), 0, Vector2.One, ResourceManager.Get<Texture2D>("cursor"), AnchorLocation.MiddleLeft, ScaleSize.None, canvas.GameObject);
-            Button button = new Button(new Vector2(0, 0), 0, Vector2.One, "newTileLocation", anchorLocation: AnchorLocation.MiddleRight, parent: canvas.GameObject, onPress: onButtonPress, tag: "TestButton");
+            Button button = new Button(new Vector2(0, 0.5f), 0, Vector2.One, "newTileLocation", anchorLocation: AnchorLocation.TopLeft, parent: canvas.GameObject, onPress: onButtonPress, tag: "TestButton");
+            CollapsibleDrawer drawer = new CollapsibleDrawer(new Vector2(88.5f, 175f), 0, Vector2.One, ResourceManager.Get<Texture2D>("leftSideDrawer"), openedButtonFilepath: "openDrawer", closedButtonFilepath: "closeDrawer", tag: "LeftDrawer");
+
 
             systemManager.Add(canvasTest.GameObject);
             systemManager.Add(canvas.GameObject);
             systemManager.Add(button.GameObject);
+            systemManager.Add(drawer.GameObject);
+            drawer.AddSubcomponentsToSystemManager(systemManager);
+
+
+
+
 
 
 

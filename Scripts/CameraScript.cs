@@ -36,8 +36,8 @@ namespace Biosphere
             mouse = gameObject.GetComponent<MouseInput>();
             minX = 0;
             minY = 0;
-            maxX = 480;
-            maxY = 270;
+            maxX = 640;
+            maxY = 360;
         }
 
         public override void Update(GameTime gameTime)

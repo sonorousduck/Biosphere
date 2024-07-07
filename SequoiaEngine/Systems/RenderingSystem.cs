@@ -10,8 +10,8 @@ namespace SequoiaEngine
         public static Vector2 centerOfScreen;
 
         public bool debugMode = false;
-        public static int width = 2 * 480;
-        public static int height = 2 * 270;
+        public static int width = 2 * 640;
+        public static int height = 2 * 360;
 
         /// <summary>
         /// Renderer system. It's update method is NOT part of the normal system update
