@@ -4,9 +4,9 @@ using MonoGame.Extended.Sprites;
 
 namespace SequoiaEngine
 {
-    public class AnimationSystem : System
+    public class SpritesheetAnimationSystem : System
     {
-        public AnimationSystem(SystemManager systemManager) : base(systemManager, typeof(AnimatedSprite))
+        public SpritesheetAnimationSystem(SystemManager systemManager) : base(systemManager, typeof(AnimatedSprite))
         {
         }
 

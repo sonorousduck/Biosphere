@@ -20,15 +20,17 @@ namespace Biosphere
     {
 
         private RenderingSystem renderingSystem;
-        private AnimationSystem animationSystem;
+        private SpritesheetAnimationSystem animationSystem;
         private PhysicsSystem physicsEngine;
         private ParticleRenderingSystem particleRenderer;
         private ParticleSystem particleSystem;
         private InputSystem inputSystem;
         private ScriptSystem scriptSystem;
-        private 
-       // private LightRenderingSystem lightRenderer;
-        RenderTarget2D mainRenderTarget;
+        private AnimatedSystem animatedSystem;
+
+        private RenderTarget2D mainRenderTarget;
+        // private LightRenderingSystem lightRenderer;
+
         private GameObject camera;
         private FontRenderingSystem fontRenderingSystem;
 
@@ -53,8 +55,9 @@ namespace Biosphere
             scriptSystem = new ScriptSystem(systemManager);
             particleSystem = new ParticleSystem(systemManager);
             particleRenderer = new ParticleRenderingSystem(systemManager);
+            animatedSystem = new AnimatedSystem(systemManager);
 
-            animationSystem = new AnimationSystem(systemManager);
+            animationSystem = new SpritesheetAnimationSystem(systemManager);
 
             camera = CameraPrefab.Create();
 
@@ -159,6 +162,7 @@ namespace Biosphere
             particleSystem.Start();
             particleRenderer.Start();
             animationSystem.Start();
+            animatedSystem.Start();
         }
 
         /// <summary>
