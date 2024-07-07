@@ -19,8 +19,13 @@ namespace SequoiaEngine
         public Color SpriteColor = Color.White;
         public AnchorLocation AnchorLocation;
         public ScaleSize Scale;
-        public Action OnButtonOpenPress;
-        public Action OnButtonClosePress;
+        public Action OnButtonPress;
+
+
+        public Texture2D ButtonClosedTexture;
+        public Texture2D ButtonOpenTexture;
+
+        public bool IsDrawerOpen;
         public string Tag { get; private set; }
 
         public GameObject GameObject { get; private set; }
@@ -48,20 +53,31 @@ namespace SequoiaEngine
             this.Rotation = rotation;
             this.Parent = parent;
             this.Tag = tag;
-
+            this.IsDrawerOpen = true;
 
             Setup();
 
-            OnButtonOpenPress = () =>
+            OnButtonPress = () =>
             {
-                Debug.WriteLine("OpenPressed!");
+                if (!IsDrawerOpen)
+                {
+                    Open();
+                }
+                else
+                {
+                    Close();
+                }
+
+                IsDrawerOpen = !IsDrawerOpen;
             };
 
-            OnButtonClosePress = () => { Debug.WriteLine("ClosedPressed!"); };
 
 
+            ButtonClosedTexture = ResourceManager.Get<Texture2D>("closeDrawer");
+            ButtonOpenTexture = ResourceManager.Get<Texture2D>("openDrawer");
 
-            button = new Button(new Vector2(10.5f, 33.5f), 0f, Vector2.One, backgroundTextureName: closedButtonFilepath, onPress: OnButtonOpenPress, anchorLocation: AnchorLocation.TopRight, parent: GameObject);
+
+            button = new Button(new Vector2(10.5f, 33.5f), 0f, Vector2.One, backgroundTexture: ButtonClosedTexture, onPress: OnButtonPress, anchorLocation: AnchorLocation.TopRight, parent: GameObject, tag: "DrawerButton");
         }
 
 
@@ -100,6 +116,24 @@ namespace SequoiaEngine
         public void AddSubcomponentsToSystemManager(SystemManager systemManager)
         {
             systemManager.Add(button.GameObject);
+        }
+
+        public void Close()
+        {
+            GameObject.GetComponent<Transform>().scale = new Vector2(0f, 0f);
+            GameObject.GetComponent<Transform>().position = new Vector2(0f, 0f);
+            button.GameObject.GetComponent<Sprite>().sprite = ButtonOpenTexture;
+            button.AdjustLocation();
+
+        }
+
+        public void Open()
+        {
+            GameObject.GetComponent<Transform>().scale = new Vector2(1f, 1f);
+            GameObject.GetComponent<Transform>().position = this.Position;
+            button.GameObject.GetComponent<Sprite>().sprite = ButtonClosedTexture;
+
+            button.AdjustLocation();    
         }
 
 

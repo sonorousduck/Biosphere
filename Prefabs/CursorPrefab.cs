@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SequoiaEngine;
+using System.Diagnostics;
 
 namespace Biosphere
 {
@@ -14,7 +15,22 @@ namespace Biosphere
             gameObject.Add(new Sprite(ResourceManager.Get<Texture2D>("cursor"), Color.White));
             gameObject.Add(new RectangleCollider(size * gameObject.GetComponent<Sprite>().size, false));
             gameObject.Add(new CursorScript(gameObject));
-            gameObject.Add(new MouseInput());
+
+
+
+            MouseInput mouseInput = new MouseInput();
+
+            mouseInput.RegisterOnPressAction("click", () =>
+            {
+                gameObject.GetComponent<CursorScript>().OnClick();
+            });
+
+
+            mouseInput.DefaultBindings.Add("click", MouseButton.LeftButton);
+
+
+
+            gameObject.Add(mouseInput);
 
             return gameObject;
 

@@ -20,6 +20,9 @@ namespace SequoiaEngine
         public AnchorLocation AnchorLocation;
         public ScaleSize Scale;
 
+        Anchor anchor;
+        Scale scale;
+
 
 
         public GameObject GameObject { get; private set; }
@@ -108,7 +111,7 @@ namespace SequoiaEngine
 
             if (!this.AnchorLocation.Equals(AnchorLocation.None))
             {
-                Anchor anchor = new(this.AnchorLocation);
+                this.anchor = new(this.AnchorLocation);
                 GameObject.Add(anchor);
 
 
@@ -117,7 +120,7 @@ namespace SequoiaEngine
 
             if (!this.Scale.Equals(ScaleSize.None))
             {
-                Scale scale = new(this.Scale);
+                this.scale = new(this.Scale);
                 GameObject.Add(scale);
 
                 GameObject.GetComponent<Transform>().scale *= scale.GetScaleModifier(GameObject);
@@ -135,7 +138,22 @@ namespace SequoiaEngine
             GameObject.Add(collider);
 
             GameObject.Add(new Rigidbody());
+        }
 
+        // This should be called if the parent changes
+        public void AdjustLocation()
+        {
+            GameObject.GetComponent<Transform>().position = Position;
+
+            if (!this.AnchorLocation.Equals(AnchorLocation.None))
+            {
+                GameObject.GetComponent<Transform>().position += anchor.GetAnchorPoint(GameObject);
+            }
+
+            if (!this.Scale.Equals(ScaleSize.None))
+            {
+                GameObject.GetComponent<Transform>().scale *= scale.GetScaleModifier(GameObject);
+            }
         }
 
     }
