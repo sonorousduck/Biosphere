@@ -59,6 +59,7 @@ namespace Biosphere
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += OnWindowResize;
+            
 
 
             screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
@@ -66,7 +67,7 @@ namespace Biosphere
             currentScreen = screens[ScreenEnum.MainMenu];
             nextScreen = ScreenEnum.MainMenu;
             newScreenFocused = true;
-
+            IsMouseVisible = false;
 
             base.Initialize();
             GameManager.Instance.Initialize(GraphicsDevice);

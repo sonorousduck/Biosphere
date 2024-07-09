@@ -39,6 +39,8 @@ namespace SequoiaEngine
             bool toggleModeActive = false,
             Action onPress = null,
             Action onRelease = null,
+            Action onHover = null,
+            Action onHoverEnd = null,
             GameObject parent = null,
             string tag = ""
             )
@@ -49,12 +51,29 @@ namespace SequoiaEngine
             this.BackgroundTexture = backgroundTexture;
             this.PressedBackgroundTexture = pressedBackground;
             this.HoverBackgroundTexture = hoverBackground;
+
+            if (hoverBackground != null)
+            {
+                if (onHover == null)
+                {
+                    onHover = () =>
+                    {
+                        GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageHover;
+                    };
+
+                    onHoverEnd = () =>
+                    {
+                        GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageUnpressed;
+                    };
+                }
+            }
+
             this.AnchorLocation = anchorLocation;
             this.Scale = scale;
             
             GameObject = new(new Transform(this.Position, this.Rotation, this.Size), parent, tag);
             
-            Setup(toggleModeActive, onPress, onRelease);
+            Setup(toggleModeActive, onPress, onRelease, onHover, onHoverEnd);
         }
 
         public Button(Vector2 position, 
@@ -68,6 +87,8 @@ namespace SequoiaEngine
             bool toggleModeActive = false,
             Action onPress = null,
             Action onRelease = null,
+            Action onHover = null,
+            Action onHoverEnd = null,
             GameObject parent = null,
             string tag = ""
             )
@@ -85,6 +106,19 @@ namespace SequoiaEngine
             if (hoverBackgroundName != "")
             {
                 this.HoverBackgroundTexture = ResourceManager.Get<Texture2D>(hoverBackgroundName);
+
+                if (onHover == null)
+                {
+                    onHover = () =>
+                    {
+                        GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageHover;
+                    };
+
+                    onHoverEnd = () =>
+                    {
+                        GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageUnpressed;
+                    };
+                }
             }
 
             this.AnchorLocation = anchorLocation;
@@ -92,11 +126,11 @@ namespace SequoiaEngine
 
             GameObject = new(new Transform(this.Position, this.Rotation, this.Size, true), parent, tag);
 
-            Setup(toggleModeActive, onPress, onRelease);
+            Setup(toggleModeActive, onPress, onRelease, onHover, onHoverEnd);
         }
 
 
-        private void Setup(bool toggleModeActive, Action onPress, Action onRelease)
+        private void Setup(bool toggleModeActive, Action onPress, Action onRelease, Action onHover, Action onHoverEnd)
         {
             float spriteDrawLocationModification = 1.0f;
 
@@ -127,7 +161,7 @@ namespace SequoiaEngine
             }
 
 
-            ButtonComponent button = new(BackgroundTexture, PressedBackgroundTexture, HoverBackgroundTexture, toggleModeActive, onPress, onRelease);
+            ButtonComponent button = new(BackgroundTexture, PressedBackgroundTexture, HoverBackgroundTexture, toggleModeActive, onPress, onRelease, onHover, onHoverEnd);
 
             GameObject.Add(button);
 

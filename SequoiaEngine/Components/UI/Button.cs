@@ -12,6 +12,8 @@ namespace SequoiaEngine
 
         public Action OnPress;
         public Action OnRelease;
+        public Action OnHover;
+        public Action OnHoverEnd;
 
         public string SpriteImageUnpressedPath;
         public string SpriteImagePressedPath;
@@ -35,7 +37,7 @@ namespace SequoiaEngine
 
 
 
-        public ButtonComponent(string spriteImageUnpressedPath = "", string spriteImagePressedPath = "", string spriteImageHoverPath = "", bool toggleModeActive = false, Action onPress = null, Action onRelease = null)
+        public ButtonComponent(string spriteImageUnpressedPath = "", string spriteImagePressedPath = "", string spriteImageHoverPath = "", bool toggleModeActive = false, Action onPress = null, Action onRelease = null, Action onHover = null, Action onHoverEnd = null)
         {
             if (spriteImageUnpressedPath != "")
             {
@@ -58,9 +60,11 @@ namespace SequoiaEngine
             this.ToggleMode = toggleModeActive;
             this.OnPress = onPress;
             this.OnRelease = onRelease;
+            this.OnHover = onHover;
+            this.OnHoverEnd = onHoverEnd;
         }
 
-        public ButtonComponent(Texture2D spriteImageUnpressed = null, Texture2D spriteImagePressed = null, Texture2D spriteImageHover = null, bool toggleModeActive = false, Action onPress = null, Action onRelease = null)
+        public ButtonComponent(Texture2D spriteImageUnpressed = null, Texture2D spriteImagePressed = null, Texture2D spriteImageHover = null, bool toggleModeActive = false, Action onPress = null, Action onRelease = null, Action onHover = null, Action onHoverEnd = null)
         {
             SpriteImageUnpressed = spriteImageUnpressed;
             SpriteImagePressed = spriteImagePressed;
@@ -68,6 +72,8 @@ namespace SequoiaEngine
             this.ToggleMode = toggleModeActive;
             this.OnPress = onPress;
             this.OnRelease = onRelease;
+            this.OnHover = onHover;
+            this.OnHoverEnd = onHoverEnd;
         }
 
     }

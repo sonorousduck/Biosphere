@@ -111,11 +111,14 @@ namespace Biosphere
             {
                 Debug.WriteLine("Pressed Button!");
             };
+            
+            systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
 
 
             Canvas canvas = new Canvas(new Vector2(320, 180), 0, new Vector2(640, 360), backgroundTextureName: "default");
             Canvas canvas1 = new Canvas(new Vector2(-120, 0), 0, new Vector2(240, 240), backgroundTextureName: "default", anchorLocation: AnchorLocation.MiddleRight, parent: canvas.GameObject);
             canvas1.GameObject.GetComponent<Sprite>().color = Color.Green;
+            
             Button button = new Button(new Vector2(0, 34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.TopMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
             Button button1 = new Button(new Vector2(0, 0.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.MiddleMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
             Button button2 = new Button(new Vector2(0, -34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.BottomMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
