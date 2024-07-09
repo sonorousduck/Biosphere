@@ -109,7 +109,7 @@ namespace Biosphere
         {
             Action onButtonPress = () =>
             {
-                Debug.WriteLine("Pressed Button!");
+                
             };
             
             systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
