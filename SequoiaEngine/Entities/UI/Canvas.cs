@@ -17,7 +17,9 @@ namespace SequoiaEngine
         public Color SpriteColor = Color.White;
         public AnchorLocation AnchorLocation;
         public ScaleSize Scale;
-        public GameObject GameObject { get; private set; }  
+        public GameObject GameObject { get; private set; }
+
+
 
         /// <summary>
         /// Instantiated differently because it is a entity instead of a prefab. I could have technically done it the same, but I think I like this way better..?
@@ -26,7 +28,7 @@ namespace SequoiaEngine
         /// <param name="rotation"></param>
         /// <param name="size"></param>
         /// <param name="backgroundTexture"></param>
-        public Canvas(Vector2 position, float rotation, Vector2 size, Texture2D backgroundTexture, AnchorLocation anchorLocation = AnchorLocation.None, ScaleSize scale = ScaleSize.None, GameObject parent = null)
+        public Canvas(Vector2 position, float rotation, Vector2 size, Texture2D backgroundTexture = null, AnchorLocation anchorLocation = AnchorLocation.None, ScaleSize scale = ScaleSize.None, GameObject parent = null)
         {
             this.Position = position;
             this.Rotation = rotation;
@@ -40,12 +42,15 @@ namespace SequoiaEngine
         }
 
 
-        public Canvas(Vector2 position, float rotation, Vector2 size, string backgroundTextureName, AnchorLocation anchorLocation = AnchorLocation.None, ScaleSize scale = ScaleSize.None, GameObject parent = null)
+        public Canvas(Vector2 position, float rotation, Vector2 size, string backgroundTextureName = "", AnchorLocation anchorLocation = AnchorLocation.None, ScaleSize scale = ScaleSize.None, GameObject parent = null)
         {
             this.Position = position;
             this.Rotation = rotation;
             this.Size = size;
-            this.BackgroundTexture = ResourceManager.Get<Texture2D>(backgroundTextureName);
+            if (backgroundTextureName != "")
+            {
+                this.BackgroundTexture = ResourceManager.Get<Texture2D>(backgroundTextureName);
+            }
             this.AnchorLocation = anchorLocation;
             this.Scale = scale;
 
@@ -72,8 +77,10 @@ namespace SequoiaEngine
                 spriteDrawLocationModification = parentBackground.renderDepth - 0.001f;
             }
 
-            GameObject.Add(new Sprite(this.BackgroundTexture, this.SpriteColor, spriteDrawLocationModification, true));
-
+            if (this.BackgroundTexture != null)
+            {
+                GameObject.Add(new Sprite(this.BackgroundTexture, this.SpriteColor, spriteDrawLocationModification, true));
+            }
             if (!this.AnchorLocation.Equals(AnchorLocation.None))
             {
                 Anchor anchor = new(this.AnchorLocation);

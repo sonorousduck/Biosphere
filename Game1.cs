@@ -62,8 +62,9 @@ namespace Biosphere
 
 
             screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
-            currentScreen = screens[ScreenEnum.Test];
-            nextScreen = ScreenEnum.Test;
+            screens.Add(ScreenEnum.MainMenu, new MainMenuScreen(this, ScreenEnum.MainMenu));
+            currentScreen = screens[ScreenEnum.MainMenu];
+            nextScreen = ScreenEnum.MainMenu;
             newScreenFocused = true;
 
 
