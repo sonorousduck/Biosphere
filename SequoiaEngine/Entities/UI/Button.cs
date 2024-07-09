@@ -161,9 +161,13 @@ namespace SequoiaEngine
             }
 
 
-            ButtonComponent button = new(BackgroundTexture, PressedBackgroundTexture, HoverBackgroundTexture, toggleModeActive, onPress, onRelease, onHover, onHoverEnd);
+            ButtonComponent button = new(BackgroundTexture, PressedBackgroundTexture, HoverBackgroundTexture, toggleModeActive, onPress, onRelease);
 
             GameObject.Add(button);
+
+            Hoverable hoverable = new(onHover, onHoverEnd);
+
+            GameObject.Add(hoverable);
 
 
             RectangleCollider collider = new RectangleCollider(this.GameObject.GetComponent<Transform>().scale * this.GameObject.GetComponent<Sprite>()?.size ?? Vector2.One, false);

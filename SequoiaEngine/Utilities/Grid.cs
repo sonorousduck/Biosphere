@@ -1,12 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SequoiaEngine
 {
@@ -71,7 +65,6 @@ namespace SequoiaEngine
                     }
                 }
             }
-
         }
 
         public void Clear()
@@ -88,9 +81,6 @@ namespace SequoiaEngine
 
             return results;
         }
-
-
-
 
         private void GetPossibleCollisions(GameObject entity, ref HashSet<GameObject> results, bool isHud)
         {
@@ -138,7 +128,7 @@ namespace SequoiaEngine
                 {
                     int indexPosition = AmountPerRow * y + x;
 
-                    if (indexPosition < 0 || indexPosition > grid.Count)
+                    if (indexPosition < 0 || indexPosition >= grid.Count)
                     {
                         return;
                     }

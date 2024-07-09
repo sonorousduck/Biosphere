@@ -63,9 +63,9 @@ namespace Biosphere
                 {
                     collidingWithUI.Add(other);
 
-                    if (other.TryGetComponent(out ButtonComponent button))
+                    if (other.TryGetComponent(out Hoverable hoverable))
                     {
-                        button.OnHover?.Invoke();
+                        hoverable.OnHoverStart?.Invoke();
                     }
 
                 }
@@ -90,9 +90,9 @@ namespace Biosphere
                 {
                     collidingWithUI.Remove(other);
 
-                    if (other.TryGetComponent(out ButtonComponent button))
+                    if (other.TryGetComponent(out Hoverable hoverable))
                     {
-                        button.OnHoverEnd?.Invoke();
+                        hoverable.OnHoverEnd?.Invoke();
                     }
                 }
             }

@@ -5,7 +5,6 @@ using MonoGame.Extended.Screens;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 
 namespace Biosphere
