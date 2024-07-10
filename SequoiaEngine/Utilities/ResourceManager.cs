@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 using System.Text.Json;
 using System.Globalization;
+using MonoGame.Extended.BitmapFonts;
 
 namespace SequoiaEngine
 {
@@ -20,20 +21,18 @@ namespace SequoiaEngine
     public static partial class ResourceManager
     {
        
-        private static Dictionary<string, SpriteFont> fonts = new();
+        private static Dictionary<string, SpriteFont> spritefonts = new();
         private static Dictionary<string, Texture2D> textures = new();
         private static Dictionary<string, SoundEffect> soundEffects = new();
         private static Dictionary<string, Song> music = new();
+        private static Dictionary<string, BitmapFont> fonts = new();
 
         public static ContentManager Manager { get; set; }
 
         public static T Get<T>(string filepath) where T : class
         {
-            if (typeof(T) == typeof(SpriteFont))
-            {
-                return GetFont(filepath) as T;
-            }
-            else if (typeof(T) == typeof(Texture2D))
+
+            if (typeof(T) == typeof(Texture2D))
             {
                 return GetTexture(filepath) as T;
             }
@@ -45,7 +44,14 @@ namespace SequoiaEngine
             {
                 return GetSoundEffect(filepath) as T;
             }
-
+            else if (typeof(T) == typeof(BitmapFont))
+            {
+                return GetFont(filepath) as T;
+            }
+            else if (typeof(T) == typeof(SpriteFont))
+            {
+                return GetSpriteFont(filepath) as T;
+            }
             else
             {
                 throw new NotSupportedException($"Type {typeof(T)} is not supported.");
@@ -54,13 +60,14 @@ namespace SequoiaEngine
 
         public static void Load<T>(string path, string name)
         {
-            if (typeof(T) == typeof(SpriteFont))
-            {
-                RegisterFont(path, name);
-            }
-            else if (typeof(T) == typeof(Texture2D))
+
+            if (typeof(T) == typeof(Texture2D))
             {
                 RegisterTexture(path, name);
+            }
+            else if (typeof(T) == typeof(BitmapFont))
+            {
+                RegisterFont(path, name);
             }
             else if (typeof(T) == typeof(Song))
             {
@@ -70,13 +77,27 @@ namespace SequoiaEngine
             {
                 RegisterSoundEffect(path, name);
             }
+            else if (typeof(T) == typeof(SpriteFont))
+            {
+                RegisterSpriteFont(path, name);
+            }
             else
             {
                 throw new NotSupportedException($"Type {typeof(T)} is not supported.");
             }
         }
 
-        private static SpriteFont GetFont(string fontName)
+        private static SpriteFont GetSpriteFont(string fontName)
+        {
+            if (!spritefonts.ContainsKey(fontName))
+            {
+                throw new Exception($"{fontName} doesn't exist in the current resource manager");
+            }
+
+            return spritefonts[fontName];
+        }
+
+        private static BitmapFont GetFont(string fontName)
         {
             if (!fonts.ContainsKey(fontName))
             {
@@ -115,11 +136,21 @@ namespace SequoiaEngine
             return soundEffects[soundEffectName];
         }
 
+        private static void RegisterSpriteFont(string pathToFont, string fontName)
+        {
+            if (!spritefonts.ContainsKey(fontName))
+            {
+                spritefonts.Add(fontName, Manager.Load<SpriteFont>(pathToFont));
+            }
+        }
+
         private static void RegisterFont(string pathToFont, string fontName)
         {
             if (!fonts.ContainsKey(fontName))
             {
-                fonts.Add(fontName, Manager.Load<SpriteFont>(pathToFont));
+                BitmapFont test = Manager.Load<BitmapFont>(pathToFont);
+
+                fonts.Add(fontName, test);
             }
         }
 

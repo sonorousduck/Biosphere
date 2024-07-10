@@ -37,6 +37,7 @@ namespace SequoiaEngine
             this.systemManager.AddGameObject += Add;
             this.systemManager.RemoveGameObject += Remove;
             this.systemManager.UpdateSystem += Update;
+            this.systemManager.StartSystem += Start;
             Id = nextId++;
             isEnabled = true;
         }

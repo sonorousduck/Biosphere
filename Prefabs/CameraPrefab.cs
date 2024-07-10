@@ -93,7 +93,6 @@ namespace Biosphere
             keyboardInput.DefaultBindings.Add("moveCameraRight", Keys.D);
             keyboardInput.DefaultBindings.Add("moveCameraLeft", Keys.A);
 
-
             MouseInput mouseInput = new MouseInput();
             mouseInput.RegisterOnPressAction("zoomOut", () =>
             {

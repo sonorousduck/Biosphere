@@ -12,8 +12,7 @@ namespace Biosphere
             GameObject gameObject = new(new Transform(position, 0, Vector2.One));
 
             gameObject.Add(new Rigidbody());
-            gameObject.Add(new Sprite(ResourceManager.Get<Texture2D>("cursor"), Color.White));
-            gameObject.Add(new RectangleCollider(size * gameObject.GetComponent<Sprite>().size, false));
+            gameObject.Add(new RectangleCollider(size * new Vector2(2, 2), false));
             gameObject.Add(new CursorScript(gameObject));
 
 

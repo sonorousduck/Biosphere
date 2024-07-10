@@ -58,15 +58,18 @@ namespace Biosphere
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += OnWindowResize;
-            
+            ResourceManager.Load<Texture2D>("Sprites/Cursor", "cursor");
+
 
 
             screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
             screens.Add(ScreenEnum.MainMenu, new MainMenuScreen(this, ScreenEnum.MainMenu));
-            currentScreen = screens[ScreenEnum.MainMenu];
-            nextScreen = ScreenEnum.MainMenu;
+            currentScreen = screens[ScreenEnum.Test];
+            nextScreen = ScreenEnum.Test;
             newScreenFocused = true;
-            IsMouseVisible = false;
+
+            Mouse.SetCursor(MouseCursor.FromTexture2D(ResourceManager.Get<Texture2D>("cursor"), 0, 0));
+
 
             base.Initialize();
             GameManager.Instance.Initialize(GraphicsDevice);

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 
 namespace SequoiaEngine
 {
@@ -54,9 +55,19 @@ namespace SequoiaEngine
                 Vector2 trueRenderPosition = renderDistanceFromCenter;*/
 
 
-                if (text.renderOutline) DrawBackground(text, transform, gameObjects[id].GetComponent<Transform>().position, spriteBatch);
-                spriteBatch.DrawString(text.spriteFont, text.text, gameObjects[id].GetComponent<Transform>().position, text.color, transform.rotation, text.centerOfRotation, transform.scale, text.spriteEffect, text.layerDepth);
+                if (text.bitmapFont != null)
+                {
+                    spriteBatch.DrawString(text.bitmapFont, text.text, gameObjects[id].GetComponent<Transform>().position, text.color, transform.rotation, text.centerOfRotation, transform.scale, text.spriteEffect, text.layerDepth);
+                }
+                else
+                {
+                    if (text.renderOutline)
+                    {
+                        DrawBackground(text, transform, gameObjects[id].GetComponent<Transform>().position, spriteBatch);
+                    }
 
+                    spriteBatch.DrawString(text.spriteFont, text.text, gameObjects[id].GetComponent<Transform>().position, text.color, transform.rotation, text.centerOfRotation, transform.scale, text.spriteEffect, text.layerDepth);
+                }
             }
         }
     }

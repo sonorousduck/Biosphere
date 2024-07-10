@@ -10,6 +10,7 @@ namespace SequoiaEngine
     public class SystemManager
     {
         public event Action<GameObject> AddGameObject;
+        public event Action StartSystem;
         public event Action<uint> RemoveGameObject;
         public event Action<GameTime> UpdateSystem;
         private Queue<GameObject> toAddObjects = new Queue<GameObject>();
@@ -58,8 +59,14 @@ namespace SequoiaEngine
             toRemoveObjects.Enqueue(gameObject.Id);
         }
 
+        public void StartSystems()
+        {
+            StartSystem?.Invoke();
+        }
+
         public void Start()
         {
+            StartSystem?.Invoke();
             while (toAddSystems.Count > 0)
             {
                 AddSystemSafe(toAddSystems.Dequeue());
@@ -80,6 +87,8 @@ namespace SequoiaEngine
                 gameObjectsDictionary.Remove(idToRemove);
                 RemoveObject(idToRemove);
             }
+
+            
         }
 
         public void Update(GameTime gameTime)

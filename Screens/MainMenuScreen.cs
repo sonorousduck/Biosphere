@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
+using MonoGame.Extended.BitmapFonts;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
@@ -53,7 +55,10 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/UI/MainMenuButtonHover", "mainMenuButton_hover");
             ResourceManager.Load<Texture2D>("Sprites/UI/MainMenuButtonPressed", "mainMenuButton_pressed");
             ResourceManager.Load<Texture2D>("Sprites/Default", "default");
-
+            
+            ResourceManager.Load<BitmapFont>("Fonts/Default", "default");
+            ResourceManager.Load<BitmapFont>("Fonts/Default_18", "default_18");
+            ResourceManager.Load<BitmapFont>("Fonts/Default_Pixel_18", "default_pixel_18");
 
         }
 
@@ -124,11 +129,25 @@ namespace Biosphere
             Button button2 = new Button(new Vector2(0, -34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.BottomMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
 
 
+            GameObject text = new GameObject(new Transform(), parent: button.GameObject);
+            Text startButtonText = new Text("Start Game", Color.White, Color.Transparent, ResourceManager.Get<BitmapFont>("default_pixel_18"), isHUDElement: true);
+            Anchor buttonAnchor = new Anchor(AnchorLocation.MiddleMiddle);
+
+            SizeF test = startButtonText.bitmapFont.MeasureString(startButtonText.text);
+            text.GetComponent<Transform>().position -= new Vector2(test.Width, test.Height) / 2f;
+            text.GetComponent<Transform>().position += buttonAnchor.GetAnchorPoint(text) + new Vector2(0, 0f);
+
+            text.Add(startButtonText);
+            text.Add(buttonAnchor);
+
+            
+
             systemManager.Add(canvas.GameObject);
             systemManager.Add(canvas1.GameObject);
             systemManager.Add(button.GameObject);
             systemManager.Add(button1.GameObject);
             systemManager.Add(button2.GameObject);
+            systemManager.Add(text);
         }
     }
 }

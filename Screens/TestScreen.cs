@@ -1,16 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 using System.Collections.Generic;
 using SequoiaEngine;
-using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Particles;
 using MonoGame.Extended.Particles.Modifiers.Interpolators;
 using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended;
+using MonoGame.Extended.Graphics;
 
 
 
@@ -27,6 +26,7 @@ namespace Biosphere
         private InputSystem inputSystem;
         private ScriptSystem scriptSystem;
         private AnimatedSystem animatedSystem;
+        private TimeManager timeManager;
 
         private RenderTarget2D mainRenderTarget;
         // private LightRenderingSystem lightRenderer;
@@ -58,6 +58,7 @@ namespace Biosphere
             animatedSystem = new AnimatedSystem(systemManager);
 
             animationSystem = new SpritesheetAnimationSystem(systemManager);
+            timeManager = new TimeManager(systemManager);
 
             camera = CameraPrefab.Create();
 
@@ -111,11 +112,11 @@ namespace Biosphere
 
 
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: SamplerState.PointWrap);
+            spriteBatch.Begin(SpriteSortMode.Immediate, samplerState: SamplerState.PointWrap);
 
             spriteBatch.Draw(tileRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 1);
             spriteBatch.Draw(mainRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
-            spriteBatch.Draw(hudRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.3f);
+            spriteBatch.Draw(hudRenderTarget, GameManager.Instance.DestinationRectangle, null, Color.White, 0, Vector2.Zero, SpriteEffects.None, 0.5f);
             spriteBatch.End(); 
         }
 
@@ -123,7 +124,6 @@ namespace Biosphere
         public override void LoadContent()
         {
 
-            ResourceManager.Load<Texture2D>("Sprites/Cursor", "cursor");
             ResourceManager.Load<Texture2D>("Sprites/ForestStoreTile", "forestStoreTile");
             ResourceManager.Load<Texture2D>("Sprites/ForestTile", "forestTile");
             ResourceManager.Load<Texture2D>("Sprites/MainInventoryBackground", "mainInventoryBackground");
@@ -139,7 +139,7 @@ namespace Biosphere
 
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
-            //renderingSystem.debugMode = true;
+            renderingSystem.debugMode = true;
             fontRenderingSystem = new FontRenderingSystem(systemManager, camera);
             //lightRenderer = new LightRenderingSystem(systemManager, camera, graphicsDevice);
             //lightRenderer.globalLightLevel = 0f;
@@ -155,7 +155,8 @@ namespace Biosphere
 
         public override void OnScreenFocus()
         {
-            inputSystem.Start();
+            systemManager.StartSystems();
+/*            inputSystem.Start();
             physicsEngine.Start();
             inputSystem.Start();
             scriptSystem.Start();
@@ -163,6 +164,7 @@ namespace Biosphere
             particleRenderer.Start();
             animationSystem.Start();
             animatedSystem.Start();
+            timeManager.Start();*/
         }
 
         /// <summary>
@@ -175,10 +177,10 @@ namespace Biosphere
 
             Texture2D _particleTexture = new(GraphicsDevice, 1, 1);
             _particleTexture.SetData(new[] { Color.White });
-            TextureRegion2D textureRegion = new(_particleTexture);
+            Texture2DRegion textureRegion = new(_particleTexture);
 
 
-            ParticleEffect _particleEffect = new(autoTrigger: false)
+            ParticleEffect _particleEffect = new()
             {
                 Position = new Vector2(200, 200),
                 Emitters = new List<ParticleEmitter>
