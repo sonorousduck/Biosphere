@@ -10,6 +10,8 @@ using MonoGame.Extended.Particles.Modifiers;
 using MonoGame.Extended.Particles.Profiles;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
+using Biosphere.Prefabs.UI;
+using MonoGame.Extended.BitmapFonts;
 
 
 
@@ -136,7 +138,7 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/UI/CloseDrawer", "closeDrawer");
             ResourceManager.Load<Texture2D>("Sprites/UI/OpenDrawer", "openDrawer");
             ResourceManager.Load<Texture2D>("Sprites/UI/LeftSideDrawer", "leftSideDrawer");
-
+            ResourceManager.Load<BitmapFont>("Fonts/Default_Pixel_18", "default_pixel_18");
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
             renderingSystem.debugMode = true;
@@ -248,12 +250,16 @@ namespace Biosphere
             CollapsibleDrawer drawer = new CollapsibleDrawer(new Vector2(88.5f, 175f), 0, Vector2.One, ResourceManager.Get<Texture2D>("leftSideDrawer"), openedButtonFilepath: "openDrawer", closedButtonFilepath: "closeDrawer", tag: "LeftDrawer");
 
 
+
+
             systemManager.Add(canvasTest.GameObject);
             systemManager.Add(canvas.GameObject);
             systemManager.Add(button.GameObject);
             systemManager.Add(drawer.GameObject);
             drawer.AddSubcomponentsToSystemManager(systemManager);
 
+            systemManager.Add(DateDisplay.Create());
+            systemManager.Add(SeasonDisplay.Create());
 
 
 
