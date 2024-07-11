@@ -41,20 +41,6 @@ namespace SequoiaEngine
                     return;
                 }
 
-/*                Vector2 distanceFromCenter;
-                if (!text.isHUDElement)
-                {
-                    distanceFromCenter = gameObjects[id].GetComponent<Transform>().position - camera.GetComponent<Transform>().position;
-                }
-                else
-                {
-                    distanceFromCenter = gameObjects[id].GetComponent<Transform>().position - new Vector2(PhysicsSystem.PHYSICS_DIMENSION_WIDTH, PhysicsSystem.PHYSICS_DIMENSION_HEIGHT) / 2f;
-                }
-
-                Vector2 renderDistanceFromCenter = distanceFromCenter;
-                Vector2 trueRenderPosition = renderDistanceFromCenter;*/
-
-
                 if (text.bitmapFont != null)
                 {
                     spriteBatch.DrawString(text.bitmapFont, text.text, gameObjects[id].GetComponent<Transform>().position, text.color, transform.rotation, text.centerOfRotation, transform.scale, text.spriteEffect, text.layerDepth);

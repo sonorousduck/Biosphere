@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using SequoiaEngine.Utilities;
 
@@ -125,6 +126,11 @@ namespace SequoiaEngine
                 rb.velocity += new Vector2(rb.acceleration.X * GameManager.Instance.ElapsedMicroseconds, rb.acceleration.Y * MathF.Pow(GameManager.Instance.ElapsedMicroseconds, 2f));
 
                 transform.position += rb.velocity * GameManager.Instance.ElapsedMicroseconds;
+
+                foreach (var child in gameObject.GetChildren())
+                {
+                    child.GetComponent<Transform>().position += rb.velocity * GameManager.Instance.ElapsedMicroseconds;
+                }
 
                 while (rb.ScriptedMovementLength() > 0)
                 {

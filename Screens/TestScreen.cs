@@ -235,8 +235,9 @@ namespace Biosphere
 
             systemManager.Add(testParticles);
 
+            GameObject cursor = CursorPrefab.Create(new Vector2(100, 100), Vector2.One);
 
-            systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
+            systemManager.Add(cursor);
 
             Action onButtonPress = () =>
             {
@@ -260,7 +261,7 @@ namespace Biosphere
 
             systemManager.Add(DateDisplay.Create());
             systemManager.Add(SeasonDisplay.Create());
-
+            systemManager.Add(SelectedItemCursorChild.Create(cursor));
 
 
 
