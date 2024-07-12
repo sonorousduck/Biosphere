@@ -130,12 +130,25 @@ namespace SequoiaEngine
                 foreach (var child in gameObject.GetChildren())
                 {
                     child.GetComponent<Transform>().position += rb.velocity * GameManager.Instance.ElapsedMicroseconds;
+                    child.GetComponent<Transform>().position = new Vector2((int)child.GetComponent<Transform>().position.X, (int)child.GetComponent<Transform>().position.Y);
                 }
 
                 while (rb.ScriptedMovementLength() > 0)
                 {
                     Vector2 scriptedMovement = rb.GetNextScriptedMovement();
                     transform.position += scriptedMovement;
+
+                    foreach (var child in gameObject.GetChildren())
+                    {
+                        child.GetComponent<Transform>().position += scriptedMovement;
+                    }
+                }
+
+                transform.position = new Vector2((int)transform.position.X, (int)transform.position.Y);
+               
+                foreach (var child in gameObject.GetChildren())
+                {
+                    child.GetComponent<Transform>().position = new Vector2((int)child.GetComponent<Transform>().position.X, (int)child.GetComponent<Transform>().position.Y);
                 }
 
                 if (!genericCollider.isStatic && !genericCollider.IsHud)

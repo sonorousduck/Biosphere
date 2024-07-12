@@ -247,8 +247,8 @@ namespace Biosphere
 
             Canvas canvas = new Canvas(new Vector2(200, 200), 0, Vector2.One, ResourceManager.Get<Texture2D>("mountainsStoreTile"));
             Canvas canvasTest = new Canvas(new Vector2(0, 0), 0, Vector2.One, ResourceManager.Get<Texture2D>("cursor"), AnchorLocation.MiddleLeft, ScaleSize.None, canvas.GameObject);
-            Button button = new Button(new Vector2(0, 0.5f), 0, Vector2.One, "newTileLocation", anchorLocation: AnchorLocation.TopLeft, parent: canvas.GameObject, onPress: onButtonPress, tag: "TestButton");
-            CollapsibleDrawer drawer = new CollapsibleDrawer(new Vector2(88.5f, 175f), 0, Vector2.One, ResourceManager.Get<Texture2D>("leftSideDrawer"), openedButtonFilepath: "openDrawer", closedButtonFilepath: "closeDrawer", tag: "LeftDrawer");
+            Button button = new Button(new Vector2(0, 0), 0, Vector2.One, "newTileLocation", anchorLocation: AnchorLocation.TopLeft, parent: canvas.GameObject, onPress: onButtonPress, tag: "TestButton");
+            CollapsibleDrawer drawer = new CollapsibleDrawer(new Vector2(88, 175), 0, Vector2.One, ResourceManager.Get<Texture2D>("leftSideDrawer"), openedButtonFilepath: "openDrawer", closedButtonFilepath: "closeDrawer", tag: "LeftDrawer");
 
 
 

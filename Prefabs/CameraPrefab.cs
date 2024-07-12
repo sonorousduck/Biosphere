@@ -39,7 +39,8 @@ namespace Biosphere
             if (GameManager.Instance.Camera.Position.Y >= minCameraY)
             {
                     Vector2 movement = new Vector2(0f, -movementAmount) * GameManager.Instance.ElapsedMicroseconds;
-                    movement.Round();
+                    movement = new Vector2((int)movement.X, (int)movement.Y);
+
 
                     GameManager.Instance.Camera.Move(movement);
                     camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
@@ -52,9 +53,7 @@ namespace Biosphere
                 if (GameManager.Instance.Camera.Position.Y <= maxCameraY)
                 {
                     Vector2 movement = new Vector2(0f, movementAmount) * GameManager.Instance.ElapsedMicroseconds;
-                    movement.Round();
-
-
+                    movement = new Vector2((int)movement.X, (int)movement.Y);
                     GameManager.Instance.Camera.Move(movement);
                     camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }
@@ -67,7 +66,7 @@ namespace Biosphere
                 if (GameManager.Instance.Camera.Position.X >= minCameraX)
                 {
                     Vector2 movement = new Vector2(-movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds;
-                    movement.Round();
+                    movement = new Vector2((int)movement.X, (int)movement.Y);
                     GameManager.Instance.Camera.Move(movement);
                     camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }
@@ -79,7 +78,7 @@ namespace Biosphere
                 if (GameManager.Instance.Camera.Position.X <= maxCameraX)
                 {
                     Vector2 movement = new Vector2(movementAmount, 0f) * GameManager.Instance.ElapsedMicroseconds;
-                    movement.Round();
+                    movement = new Vector2((int)movement.X, (int)movement.Y);
                     GameManager.Instance.Camera.Move(movement);
                     camera.GetComponent<Transform>().position = GameManager.Instance.Camera.Position;
                 }

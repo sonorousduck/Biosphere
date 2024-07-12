@@ -61,7 +61,6 @@ namespace Biosphere
                 CurrentSeason = Season.Winter;
             }
 
-            Debug.WriteLine(CurrentDate.ToString());
             TotalElapsedTime += deltaTimeSpan;
         }
 

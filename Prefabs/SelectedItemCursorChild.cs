@@ -8,10 +8,15 @@ namespace Biosphere
     {
         public static GameObject Create(GameObject cursorParent)
         {
-            GameObject gameObject = new GameObject(cursorParent.GetComponent<Transform>(), parent: cursorParent);
+            Transform parentTransform = cursorParent.GetComponent<Transform>();
+            // Make a copy of it, not use it directly. Using it directly makes it get applied to both
+            Transform transform = new Transform(new Vector2(parentTransform.position.X, parentTransform.position.Y), parentTransform.rotation, parentTransform.scale, parentTransform.IsHUD);
 
-            gameObject.Add(new Sprite(ResourceManager.Get<Texture2D>("plainsStoreTile"), Color.White));
+            GameObject gameObject = new GameObject(transform, parent: cursorParent);
 
+            gameObject.Add(new Sprite(ResourceManager.Get<Texture2D>("plainsStoreTile"), Color.White, isHUD: true));
+
+            gameObject.Add(new SelectedItemCursorScript(gameObject));
 
             return gameObject;
         }

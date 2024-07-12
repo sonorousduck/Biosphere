@@ -36,6 +36,7 @@ namespace SequoiaEngine
         public GameObject(GameObject parent, string tag = "") : this()
         {
             this.parent = parent;
+            parent.children.Add(this);
             this.Tag = tag;
         }
 
@@ -46,6 +47,10 @@ namespace SequoiaEngine
 
             this.Add(transform);
             this.parent = parent;
+            if (parent != null)
+            {
+                parent.children.Add(this);
+            }
             this.Tag = tag;
         }
 
