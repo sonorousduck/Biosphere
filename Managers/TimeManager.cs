@@ -74,6 +74,8 @@ namespace Biosphere
             gameSpeedModifier = speed;
 
             gameSpeedModifier = Math.Clamp(gameSpeedModifier, slowestGameSpeed, fastestGameSpeed);
+            Debug.WriteLine(gameSpeedModifier);
+
         }
 
         public void IncreaseGameSpeed(float increasedAmount)
@@ -81,6 +83,7 @@ namespace Biosphere
             gameSpeedModifier += increasedAmount;
 
             gameSpeedModifier = Math.Clamp(gameSpeedModifier, slowestGameSpeed, fastestGameSpeed);
+            Debug.WriteLine(gameSpeedModifier);
         }
 
         public void DecreaseGameSpeed(float decreasedAmount)

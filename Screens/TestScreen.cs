@@ -138,6 +138,15 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/UI/CloseDrawer", "closeDrawer");
             ResourceManager.Load<Texture2D>("Sprites/UI/OpenDrawer", "openDrawer");
             ResourceManager.Load<Texture2D>("Sprites/UI/LeftSideDrawer", "leftSideDrawer");
+            ResourceManager.Load<Texture2D>("Sprites/Default", "default");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SlowTimeButton", "slowTimeButton");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SlowTimeButtonHover", "slowTimeButton_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SlowTimeButtonPressed", "slowTimeButton_pressed");
+
+            ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButton", "speedTimeButton");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButtonHover", "speedTimeButton_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButtonPressed", "speedTimeButton_pressed");
+
             ResourceManager.Load<BitmapFont>("Fonts/Default_Pixel_18", "default_pixel_18");
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
@@ -261,8 +270,11 @@ namespace Biosphere
 
             systemManager.Add(DateDisplay.Create());
             systemManager.Add(SeasonDisplay.Create());
-            systemManager.Add(SelectedItemCursorChild.Create(cursor));
+            //systemManager.Add(SelectedItemCursorChild.Create(cursor));
 
+            GameObject parentObject = SpeedControl.Create(systemManager);
+
+            systemManager.Add(parentObject);
 
 
 

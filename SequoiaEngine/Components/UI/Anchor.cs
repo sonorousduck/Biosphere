@@ -41,7 +41,13 @@ namespace SequoiaEngine
 
             Transform parentTransform = parent.GetComponent<Transform>();
             Sprite parentSprite = parent.GetComponent<Sprite>();
-            Vector2 parentScale = parentTransform.scale * parentSprite?.size ?? Vector2.One;
+            Vector2 parentScale = parentTransform.scale;
+
+            if (parentSprite?.size != null)
+            {
+                parentScale *= parentSprite.size;
+            }
+
             Vector2 parentPosition = parentTransform.position - parentScale / 2;
 
             switch (this.Location)
