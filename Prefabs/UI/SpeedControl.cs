@@ -2,10 +2,6 @@
 using Microsoft.Xna.Framework;
 using SequoiaEngine;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MonoGame.Extended.BitmapFonts;
 
 namespace Biosphere
@@ -16,7 +12,7 @@ namespace Biosphere
         {
             GameObject parentObject = new GameObject(new Transform(new Vector2(GameManager.Instance.RenderWidth - 150, 40), 0f, new Vector2(96, 32), isHUD: true));
 
-            Sprite testLocationSprite = new Sprite(ResourceManager.Get<Texture2D>("default"), Color.LightCoral, isHUD: true);
+            Sprite testLocationSprite = new Sprite(ResourceManager.Get<Texture2D>("default"), Color.Transparent);
 
 
             parentObject.Add(testLocationSprite);
@@ -44,7 +40,7 @@ namespace Biosphere
                 ResourceManager.Get<Texture2D>("speedTimeButton_hover"),
                 ResourceManager.Get<Texture2D>("speedTimeButton_pressed"),
                 anchorLocation: AnchorLocation.MiddleRight,
-                onPress: onTimeSpeedDown,
+                onPress: onTimeSpeedUp,
                 parent: parentObject
             );
 
@@ -59,23 +55,30 @@ namespace Biosphere
                 ResourceManager.Get<Texture2D>("slowTimeButton_pressed"),
                 ResourceManager.Get<Texture2D>("slowTimeButton_hover"),
                 anchorLocation: AnchorLocation.MiddleLeft,
-                onPress: onTimeSpeedUp,
+                onPress: onTimeSpeedDown,
                 parent: parentObject
             );
 
             systemManager.Add(minusButton.GameObject);
 
-            GameObject textObject = new GameObject(new Transform(), parent: parentObject);
+            GameObject textObject = new GameObject(new Transform(isHUD: true), parent: parentObject);
 
             // TODO: Create script that updates this
 
             Text text = new Text(TimeManager.Instance.GetGameSpeed().ToString(), Color.White, Color.Transparent, ResourceManager.Get<BitmapFont>("default_pixel_18"));
 
+
+            Anchor anchor = new(AnchorLocation.MiddleMiddle);
+
+            textObject.Add(new GameSpeedTextScript(textObject));
+
             textObject.Add(text);
+            textObject.Add(anchor);
+
+            textObject.GetComponent<Transform>().position += anchor.GetAnchorPoint(textObject);
 
 
-
-            systemManager.Add(textObject);
+            systemManager.Add(textObject); 
 
 
             return parentObject;

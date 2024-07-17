@@ -86,7 +86,7 @@ namespace SequoiaEngine
                 {
                     staticGrid.Insert(gameObject);
                 }
-                else if (gameObject.GetComponent<Collider>().IsHud)
+                else if (gameObject.GetComponent<Transform>().IsHUD)
                 {
                     hudGrid.Insert(gameObject);
                 }
@@ -151,7 +151,7 @@ namespace SequoiaEngine
                     child.GetComponent<Transform>().position = new Vector2((int)child.GetComponent<Transform>().position.X, (int)child.GetComponent<Transform>().position.Y);
                 }
 
-                if (!genericCollider.isStatic && !genericCollider.IsHud)
+                if (!genericCollider.isStatic && !transform.IsHUD)
                 {
                     grid.Insert(gameObject);
                 }
@@ -160,7 +160,7 @@ namespace SequoiaEngine
                     staticGrid.Insert(gameObject);
                 }
 
-                if (hudGrid.ShouldRebuild && genericCollider.IsHud)
+                if (hudGrid.ShouldRebuild && transform.IsHUD)
                 {
                     hudGrid.Insert(gameObject);
                 }
@@ -304,11 +304,11 @@ namespace SequoiaEngine
                 Vector2 circleOnePosition = circle1.GetComponent<Transform>().position;
                 Vector2 circleTwoPosition = circle2.GetComponent<Transform>().position;
 
-                if (!circle1.GetComponent<Collider>().IsHud)
+                if (!circle1.GetComponent<Transform>().IsHUD)
                 {
                     circleOnePosition = (GameManager.Instance.Camera.WorldToScreen(circleOnePosition) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 }
-                if (!circle2.GetComponent<Collider>().IsHud)
+                if (!circle2.GetComponent<Transform>().IsHUD)
                 {
                     circleTwoPosition = (GameManager.Instance.Camera.WorldToScreen(circleTwoPosition) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 }
@@ -334,12 +334,12 @@ namespace SequoiaEngine
 
             if (isHud)
             {
-                if (!circleCollider.IsHud)
+                if (!circleTransform.IsHUD)
                 {
                     circleLocation = (GameManager.Instance.Camera.WorldToScreen(circleLocation) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 }
 
-                else if (!squareCollider.IsHud)
+                else if (!squareTransform.IsHUD)
                 {
                     rectangleLocation = (GameManager.Instance.Camera.WorldToScreen(rectangleLocation) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 }
@@ -389,12 +389,12 @@ namespace SequoiaEngine
 
             if (isHud)
             {
-                if (!square1Collider.IsHud)
+                if (!square1Transform.IsHUD)
                 {
                     squareOnePosition = (GameManager.Instance.Camera.WorldToScreen(squareOnePosition) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 }
 
-                else if (!square2Collider.IsHud)
+                else if (!square2Transform.IsHUD)
                 {
                     squareTwoPosition = (GameManager.Instance.Camera.WorldToScreen(squareTwoPosition) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 }

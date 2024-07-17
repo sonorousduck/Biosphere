@@ -51,11 +51,10 @@ namespace Biosphere
             if (other != null)
             {
                 RectangleCollider collider = other.GetComponent<RectangleCollider>();
-
+                Transform colliderTransform = other.GetComponent<Transform>();
                 collider.IsColliding = true;
-                Debug.WriteLine(other.Tag);
 
-                if (!collider.IsHud)
+                if (!colliderTransform.IsHUD)
                 {
                     collidingWithGame.Add(other);
                 }
@@ -79,10 +78,11 @@ namespace Biosphere
             if (other != null)
             {
                 RectangleCollider collider = other.GetComponent<RectangleCollider>();
+                Transform colliderTransform = other.GetComponent<Transform>();
 
                 collider.IsColliding = false;
                 
-                if (!collider.IsHud)
+                if (!colliderTransform.IsHUD)
                 {
                     collidingWithGame.Remove(other);
                 }

@@ -32,7 +32,6 @@ namespace SequoiaEngine
             this.currentTime = new TimeSpan();
             this.singleFrameSize = singleFrameSize;
             this.layerDepth = layerDepth;
-            this.IsHUD = isHUD;
             this.startFrame = startFrame;
             this.endFrame = endFrame;
             this.playOnce = playOnce;

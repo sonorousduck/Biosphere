@@ -129,8 +129,8 @@ namespace Biosphere
             Button button2 = new Button(new Vector2(0, -34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.BottomMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
 
 
-            GameObject text = new GameObject(new Transform(), parent: button.GameObject);
-            Text startButtonText = new Text("Start Game", Color.White, Color.Transparent, ResourceManager.Get<BitmapFont>("default_pixel_18"), isHUDElement: true);
+            GameObject text = new GameObject(new Transform(isHUD: true), parent: button.GameObject);
+            Text startButtonText = new Text("Start Game", Color.White, Color.Transparent, ResourceManager.Get<BitmapFont>("default_pixel_18"));
             Anchor buttonAnchor = new Anchor(AnchorLocation.MiddleMiddle);
 
             SizeF test = startButtonText.bitmapFont.MeasureString(startButtonText.text);

@@ -20,6 +20,15 @@ namespace SequoiaEngine
             this.previousPosition = Vector2.Zero;
         }
 
+        public Transform(bool isHUD)
+        {
+            this.position = Vector2.Zero;
+            this.rotation = 0;
+            this.scale = Vector2.One;
+            this.previousPosition = Vector2.Zero;
+            this.IsHUD = isHUD;
+        }
+
         public Transform(Vector2 position, float rotation, Vector2 scale, bool isHUD = false)
         {
             this.position = position;

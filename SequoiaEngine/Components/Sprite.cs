@@ -22,14 +22,12 @@ namespace SequoiaEngine
         /// <param name="color"></param>
         /// <param name="center"></param>
         /// <param name="renderDepth"></param>
-        /// <param name="isHUD"></param>
-        public Sprite(Texture2D sprite, Color color, Vector2 center, Vector2 spriteSize, float renderDepth = 1, bool isHUD = false) : base(isHUD)
+        public Sprite(Texture2D sprite, Color color, Vector2 center, Vector2 spriteSize, float renderDepth = 1)
         {
             this.sprite = sprite;
             this.color = color;
             this.center = center;
             this.renderDepth = renderDepth;
-            this.IsHUD = isHUD;
             this.size = spriteSize;
         }
 
@@ -39,8 +37,7 @@ namespace SequoiaEngine
         /// <param name="sprite"></param>
         /// <param name="color"></param>
         /// <param name="renderDepth"></param>
-        /// <param name="isHUD"></param>
-        public Sprite(Texture2D sprite, Color color, float renderDepth = 1, bool isHUD = false) : this(sprite, color, new Vector2((float)sprite.Width / 2, (float)sprite.Height / 2), new Vector2(sprite.Width, sprite.Height), renderDepth, isHUD)
+        public Sprite(Texture2D sprite, Color color, float renderDepth = 1) : this(sprite, color, new Vector2((float)sprite.Width / 2, (float)sprite.Height / 2), new Vector2(sprite.Width, sprite.Height), renderDepth)
         {
         }
     }

@@ -107,7 +107,7 @@ namespace SequoiaEngine
 
 
             // If the collider is not HUD, but we are looking for HUD elements, we need to transform it from world space to screen space
-            if (!collider.IsHud && isHud)
+            if (!transform.IsHUD && isHud)
             {
                 position = (GameManager.Instance.Camera.WorldToScreen(position) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;
                 endPosition = (GameManager.Instance.Camera.WorldToScreen(endPosition) / GameManager.Instance.ActualWindowSize) * GameManager.Instance.RenderWindowSize;

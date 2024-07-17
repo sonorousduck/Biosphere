@@ -19,8 +19,9 @@ namespace SequoiaEngine
             foreach ((uint id, GameObject gameObject) in gameObjects)
             {
                 Particle particle = gameObject.GetComponent<Particle>();
+                Transform particleTransform = gameObject.GetComponent<Transform>();
 
-                if (isDrawingHud != particle.IsHud) return;
+                if (isDrawingHud != particleTransform.IsHUD) return;
 
                 spriteBatch.Draw(particle.Effect);
             }

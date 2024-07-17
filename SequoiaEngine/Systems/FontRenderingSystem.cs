@@ -36,7 +36,7 @@ namespace SequoiaEngine
                 Text text = gameObjects[id].GetComponent<Text>();
                 Transform transform = gameObjects[id].GetComponent<Transform>();
 
-                if (isDrawingHud != text.isHUDElement)
+                if (isDrawingHud != transform.IsHUD)
                 {
                     return;
                 }

@@ -48,7 +48,7 @@ namespace SequoiaEngine
             )
         {
            
-            GameObject = new(new Transform(position, rotation, size));
+            GameObject = new(new Transform(position, rotation, size, true));
             this.Position = position;
             this.BackgroundTexture = backgroundTexture;
             this.Size = size;
@@ -95,7 +95,7 @@ namespace SequoiaEngine
                 spriteDrawLocationModification = parentBackground.renderDepth - 0.001f;
             }
 
-            GameObject.Add(new Sprite(this.BackgroundTexture, this.SpriteColor, spriteDrawLocationModification, true));
+            GameObject.Add(new Sprite(this.BackgroundTexture, this.SpriteColor, spriteDrawLocationModification));
 
             if (!this.AnchorLocation.Equals(AnchorLocation.None))
             {

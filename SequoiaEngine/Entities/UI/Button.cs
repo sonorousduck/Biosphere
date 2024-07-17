@@ -71,7 +71,7 @@ namespace SequoiaEngine
             this.AnchorLocation = anchorLocation;
             this.Scale = scale;
             
-            GameObject = new(new Transform(this.Position, this.Rotation, this.Size), parent, tag);
+            GameObject = new(new Transform(this.Position, this.Rotation, this.Size, true), parent, tag);
             
             Setup(toggleModeActive, onPress, onRelease, onHover, onHoverEnd);
         }
@@ -141,7 +141,7 @@ namespace SequoiaEngine
                 spriteDrawLocationModification = parentBackground.renderDepth - 0.001f;
             }
 
-            GameObject.Add(new Sprite(this.BackgroundTexture, this.SpriteColor, spriteDrawLocationModification, true));
+            GameObject.Add(new Sprite(this.BackgroundTexture, this.SpriteColor, spriteDrawLocationModification));
 
             if (!this.AnchorLocation.Equals(AnchorLocation.None))
             {
@@ -172,7 +172,6 @@ namespace SequoiaEngine
 
             RectangleCollider collider = new RectangleCollider(this.GameObject.GetComponent<Transform>().scale * this.GameObject.GetComponent<Sprite>()?.size ?? Vector2.One, false);
             collider.LayersToCollideWith = CollisionLayer.UI;
-            collider.IsHud = true;
             GameObject.Add(collider);
 
             GameObject.Add(new Rigidbody());
