@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
@@ -64,8 +65,8 @@ namespace Biosphere
 
             screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
             screens.Add(ScreenEnum.MainMenu, new MainMenuScreen(this, ScreenEnum.MainMenu));
-            currentScreen = screens[ScreenEnum.Test];
-            nextScreen = ScreenEnum.Test;
+            currentScreen = screens[ScreenEnum.MainMenu];
+            nextScreen = ScreenEnum.MainMenu;
             newScreenFocused = true;
 
             Mouse.SetCursor(MouseCursor.FromTexture2D(ResourceManager.Get<Texture2D>("cursor"), 0, 0));
@@ -73,6 +74,8 @@ namespace Biosphere
 
             base.Initialize();
             GameManager.Instance.Initialize(GraphicsDevice);
+            screenManager.LoadScreen(currentScreen, new FadeTransition(GraphicsDevice, Color.Black));
+
         }
 
         private void OnWindowResize(object sender, EventArgs e)
@@ -102,6 +105,16 @@ namespace Biosphere
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.D1))
+            {
+                nextScreen = ScreenEnum.MainMenu;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D2))
+            {
+                nextScreen = ScreenEnum.Test;
+            }
+
             gameManager.Update(gameTime);
             inputManager.Update();
             // Diplays FPS
@@ -110,6 +123,8 @@ namespace Biosphere
 
             if (newScreenFocused)
             {
+                screenManager.LoadScreen(currentScreen, new FadeTransition(GraphicsDevice, Color.Black));
+                currentScreen.SetupGameObjects();
                 currentScreen.Start();
                 currentScreen.OnScreenFocus();
                 newScreenFocused = false;
