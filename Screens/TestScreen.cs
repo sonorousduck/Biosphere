@@ -12,6 +12,8 @@ using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
 using Biosphere.Prefabs.UI;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Tiled;
+using MonoGame.Extended.Tiled.Renderers;
 
 
 
@@ -29,6 +31,10 @@ namespace Biosphere
         private ScriptSystem scriptSystem;
         private AnimatedSystem animatedSystem;
         private TimeManager timeManager;
+
+        private TiledRenderingSystem tiledRenderingSystem;
+
+
 
         private RenderTarget2D mainRenderTarget;
         // private LightRenderingSystem lightRenderer;
@@ -58,6 +64,8 @@ namespace Biosphere
             particleSystem = new ParticleSystem(systemManager);
             particleRenderer = new ParticleRenderingSystem(systemManager);
             animatedSystem = new AnimatedSystem(systemManager);
+
+            tiledRenderingSystem = new TiledRenderingSystem(systemManager);
 
             animationSystem = new SpritesheetAnimationSystem(systemManager);
             timeManager = new TimeManager(systemManager);
@@ -89,6 +97,9 @@ namespace Biosphere
             graphics.GraphicsDevice.Clear(Color.Transparent);
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp, transformMatrix: GameManager.Instance.Camera.GetViewMatrix());
+
+
+            tiledRenderingSystem.Draw(gameTime, spriteBatch);
             renderingSystem.Draw(gameTime, spriteBatch);
             particleRenderer.Draw(gameTime, spriteBatch);
             fontRenderingSystem.Draw(gameTime, spriteBatch);
@@ -103,7 +114,7 @@ namespace Biosphere
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
 
-
+            tiledRenderingSystem.Draw(gameTime, spriteBatch, true);
             renderingSystem.Draw(gameTime, spriteBatch, true);
             particleRenderer.Draw(gameTime, spriteBatch, true);
             fontRenderingSystem.Draw(gameTime, spriteBatch, true);
@@ -152,6 +163,7 @@ namespace Biosphere
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
             renderingSystem.debugMode = true;
             fontRenderingSystem = new FontRenderingSystem(systemManager, camera);
+
             //lightRenderer = new LightRenderingSystem(systemManager, camera, graphicsDevice);
             //lightRenderer.globalLightLevel = 0f;
 
@@ -275,6 +287,15 @@ namespace Biosphere
             GameObject parentObject = SpeedControl.Create(systemManager);
 
             systemManager.Add(parentObject);
+
+
+            GameObject tiledMap = new();
+
+            TiledMapComponent tiledMapComponent = new(Content.Load<TiledMap>("Maps/Test"));
+
+            tiledMap.Add(tiledMapComponent);
+
+            systemManager.Add(tiledMap);
 
 
 

@@ -5,6 +5,7 @@ namespace SequoiaEngine
 {
     public enum ScreenEnum
     {
+        None,
         Default,
         Game,
         MainMenu,

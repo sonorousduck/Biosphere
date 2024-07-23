@@ -65,6 +65,11 @@
 /processor:BitmapFontProcessor
 /build:Fonts/Default.fnt
 
+#begin Maps/Test.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:Maps/Test.tmx
+
 #begin Sprites/box.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -376,4 +381,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/UI/SpeedTimeButtonPressed.png
+
+#begin Spritesheets/BasicTilemap.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Spritesheets/BasicTilemap.png
 

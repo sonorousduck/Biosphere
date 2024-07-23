@@ -1,0 +1,49 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "Test.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 2
+        },
+        "Test.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 432,
+                "y": 161
+            }
+        },
+        "Test.tmx#BasicTilemap": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/sonor/OneDrive/Desktop/Projects/Biosphere/Designs/Tiled",
+    "last.externalTilesetPath": "C:/Users/sonor/OneDrive/Desktop/Projects/Biosphere/Designs/Spritesheets",
+    "last.imagePath": "C:/Users/sonor/OneDrive/Desktop/Projects/Biosphere/Designs/Spritesheets",
+    "map.height": 20,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 40,
+    "openFiles": [
+        "Test.tmx"
+    ],
+    "project": "Biosphere.tiled-project",
+    "recentFiles": [
+        "Test.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFilter": "All Files (*)",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

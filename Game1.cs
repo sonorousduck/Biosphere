@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
@@ -14,13 +12,8 @@ namespace Biosphere
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private readonly ScreenManager screenManager;
+        private ScreenManager screenManager;
 
-
-        private Dictionary<ScreenEnum, SequoiaEngine.Screen> screens;
-        private SequoiaEngine.Screen currentScreen;
-        private ScreenEnum nextScreen;
-        private bool newScreenFocused;
         const int VIRTUAL_WIDTH = 640;
         const int VIRTUAL_HEIGHT = 360; // Aspect ratio of 16:9
 
@@ -32,13 +25,12 @@ namespace Biosphere
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            screenManager = new ScreenManager();
-            Components.Add(screenManager);
-            screens = new();
-
             inputManager = new();
             inputConfig = new();
             gameManager = new(_graphics, Window, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+            GameManager.Instance.Initialize(GraphicsDevice);
+
+            screenManager = new();
 
             inputConfig.LoadControls();
 
@@ -61,20 +53,14 @@ namespace Biosphere
             Window.ClientSizeChanged += OnWindowResize;
             ResourceManager.Load<Texture2D>("Sprites/Cursor", "cursor");
 
-
-
-            screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
-            screens.Add(ScreenEnum.MainMenu, new MainMenuScreen(this, ScreenEnum.MainMenu));
-            currentScreen = screens[ScreenEnum.MainMenu];
-            nextScreen = ScreenEnum.MainMenu;
-            newScreenFocused = true;
+            screenManager.Screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
+            screenManager.Screens.Add(ScreenEnum.MainMenu, new MainMenuScreen(this, ScreenEnum.MainMenu));
+            screenManager.SetCurrentScreen(ScreenEnum.Test);
 
             Mouse.SetCursor(MouseCursor.FromTexture2D(ResourceManager.Get<Texture2D>("cursor"), 0, 0));
 
 
             base.Initialize();
-            GameManager.Instance.Initialize(GraphicsDevice);
-            screenManager.LoadScreen(currentScreen, new FadeTransition(GraphicsDevice, Color.Black));
 
         }
 
@@ -87,32 +73,35 @@ namespace Biosphere
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            foreach (ScreenEnum screen in screens.Keys)
+
+            foreach (ScreenEnum screen in screenManager.Screens.Keys)
             {
-                screens[screen].Initialize(GraphicsDevice, _graphics, Window);
+                screenManager.Screens[screen].Initialize(GraphicsDevice, _graphics, Window);
             }
 
-            foreach (ScreenEnum screen in screens.Keys)
+            foreach (ScreenEnum screen in screenManager.Screens.Keys)
             {
-                screens[screen].LoadContent();
-                screens[screen].SetupGameObjects();
+                screenManager.Screens[screen].LoadContent();
+                screenManager.Screens[screen].SetupGameObjects();
             }
 
         }
 
         protected override void Update(GameTime gameTime)
         {
+            screenManager.PreUpdate();
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.D1))
             {
-                nextScreen = ScreenEnum.MainMenu;
+                screenManager.SetNextScreen(ScreenEnum.MainMenu);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D2))
+            if (Keyboard.GetState().IsKeyDown(Keys.D2)) 
             {
-                nextScreen = ScreenEnum.Test;
+                screenManager.SetNextScreen(ScreenEnum.Test);
             }
 
             gameManager.Update(gameTime);
@@ -121,22 +110,8 @@ namespace Biosphere
             //Debug.WriteLine(1 / gameTime.ElapsedGameTime.TotalSeconds);
 
 
-            if (newScreenFocused)
-            {
-                screenManager.LoadScreen(currentScreen, new FadeTransition(GraphicsDevice, Color.Black));
-                currentScreen.SetupGameObjects();
-                currentScreen.Start();
-                currentScreen.OnScreenFocus();
-                newScreenFocused = false;
-            }
+            screenManager.Update(gameTime);
 
-            currentScreen.Update(gameTime);
-
-            if (screens[nextScreen] != currentScreen)
-            {
-                currentScreen.OnScreenDefocus();
-                newScreenFocused = true;
-            }
             base.Update(gameTime);
         }
 
@@ -144,9 +119,7 @@ namespace Biosphere
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            currentScreen.Draw(gameTime);
-
-            currentScreen = screens[nextScreen];
+            screenManager.Draw(gameTime);
 
             base.Draw(gameTime);
         }
