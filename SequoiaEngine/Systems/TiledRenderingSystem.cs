@@ -21,6 +21,11 @@ namespace SequoiaEngine
 
         public void SetRenderedTiledMap(TiledMapComponent tiledMapComponent)
         {
+            if (renderer == null)
+            {
+                Start();
+            }
+
             this.renderer.LoadMap(tiledMapComponent.TiledMap);
             hasSetMap = true;
         }
@@ -51,12 +56,12 @@ namespace SequoiaEngine
                 }
             }
 
-                renderer.Update(gameTime);
+            renderer?.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, bool isDrawingHud = false)
         {
-            renderer.Draw(GameManager.Instance.Camera.GetViewMatrix());
+            renderer?.Draw(GameManager.Instance.Camera.GetViewMatrix());
         }
 
         

@@ -62,7 +62,7 @@ namespace Biosphere
 
             base.Initialize();
 
-            screenManager.SetNextScreen(ScreenEnum.Test);
+            screenManager.SetNextScreen(ScreenEnum.MainMenu);
         }
 
         private void OnWindowResize(object sender, EventArgs e)
@@ -101,6 +101,11 @@ namespace Biosphere
             if (Keyboard.GetState().IsKeyDown(Keys.D2)) 
             {
                 screenManager.SetNextScreen(ScreenEnum.Test, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
+            }
+
+            if (screenManager.NextScreen.Equals(ScreenEnum.Quit))
+            {
+                Exit();
             }
 
             gameManager.Update(gameTime);

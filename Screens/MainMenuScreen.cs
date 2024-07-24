@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.BitmapFonts;
+using MonoGame.Extended.Screens.Transitions;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
@@ -113,11 +114,21 @@ namespace Biosphere
 
         public override void SetupGameObjects()
         {
+            Action onStartButtonPress = () =>
+            {
+                SequoiaEngine.ScreenManager.Instance.SetNextScreen(ScreenEnum.Test, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
+            };
+
             Action onButtonPress = () =>
             {
                 
             };
-            
+
+            Action onQuitButtonPress = () =>
+            {
+                SequoiaEngine.ScreenManager.Instance.SetNextScreen(ScreenEnum.Quit, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
+            };
+
             systemManager.Add(CursorPrefab.Create(new Vector2(100, 100), Vector2.One));
 
 
@@ -125,9 +136,9 @@ namespace Biosphere
             Canvas canvas1 = new Canvas(new Vector2(-120, 0), 0, new Vector2(240, 240), backgroundTextureName: "default", anchorLocation: AnchorLocation.MiddleRight, parent: canvas.GameObject);
             canvas1.GameObject.GetComponent<Sprite>().color = Color.Green;
             
-            Button button = new Button(new Vector2(0, 34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.TopMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
+            Button button = new Button(new Vector2(0, 34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.TopMiddle, parent: canvas1.GameObject, onPress: onStartButtonPress, tag: "TestButton");
             Button button1 = new Button(new Vector2(0, 0.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.MiddleMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
-            Button button2 = new Button(new Vector2(0, -34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.BottomMiddle, parent: canvas1.GameObject, onPress: onButtonPress, tag: "TestButton");
+            Button button2 = new Button(new Vector2(0, -34.5f), 0, Vector2.One, backgroundTextureName: "mainMenuButton", hoverBackgroundName: "mainMenuButton_hover", pressedBackgroundName: "mainMenuButton_pressed", anchorLocation: AnchorLocation.BottomMiddle, parent: canvas1.GameObject, onPress: onQuitButtonPress, tag: "TestButton");
 
 
             GameObject text = new GameObject(new Transform(isHUD: true), parent: button.GameObject);

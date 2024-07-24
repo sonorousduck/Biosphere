@@ -62,8 +62,14 @@ namespace SequoiaEngine
             }
         }
 
-        public void SetCurrentScreen(ScreenEnum newScreen = ScreenEnum.None)
+        private void SetCurrentScreen(ScreenEnum newScreen = ScreenEnum.None)
         {
+            if (newScreen.Equals(ScreenEnum.Quit))
+            {
+                NextScreen = newScreen;
+                return;
+            }
+
             if (!newScreen.Equals(ScreenEnum.None))
             {
                 NextScreen = newScreen;
