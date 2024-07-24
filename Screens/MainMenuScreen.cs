@@ -114,17 +114,17 @@ namespace Biosphere
 
         public override void SetupGameObjects()
         {
-            Action onStartButtonPress = () =>
+            Action<GameObject> onStartButtonPress = (GameObject button) =>
             {
                 SequoiaEngine.ScreenManager.Instance.SetNextScreen(ScreenEnum.Test, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
             };
 
-            Action onButtonPress = () =>
+            Action<GameObject> onButtonPress = (GameObject button) =>
             {
                 
             };
 
-            Action onQuitButtonPress = () =>
+            Action<GameObject> onQuitButtonPress = (GameObject button) =>
             {
                 SequoiaEngine.ScreenManager.Instance.SetNextScreen(ScreenEnum.Quit, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
             };

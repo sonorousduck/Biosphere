@@ -64,7 +64,7 @@ namespace Biosphere
 
                     if (other.TryGetComponent(out Hoverable hoverable))
                     {
-                        hoverable.OnHoverStart?.Invoke();
+                        hoverable.OnHoverStart?.Invoke(this.gameObject);
                     }
 
                 }
@@ -92,7 +92,7 @@ namespace Biosphere
 
                     if (other.TryGetComponent(out Hoverable hoverable))
                     {
-                        hoverable.OnHoverEnd?.Invoke();
+                        hoverable.OnHoverEnd?.Invoke(this.gameObject);
                     }
                 }
             }
@@ -105,7 +105,7 @@ namespace Biosphere
             {
                 if (collidingWithUI[0].TryGetComponent(out ButtonComponent button))
                 {
-                    button.OnPress?.Invoke();
+                    button.OnPress?.Invoke(collidingWithUI[0]);
                 }
             }
         }

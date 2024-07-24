@@ -10,8 +10,8 @@ namespace SequoiaEngine
     public class ButtonComponent : Component
     {
 
-        public Action OnPress;
-        public Action OnRelease;
+        public Action<GameObject> OnPress;
+        public Action<GameObject> OnRelease;
 
         public string SpriteImageUnpressedPath;
         public string SpriteImagePressedPath;
@@ -35,7 +35,7 @@ namespace SequoiaEngine
 
 
 
-        public ButtonComponent(string spriteImageUnpressedPath = "", string spriteImagePressedPath = "", string spriteImageHoverPath = "", bool toggleModeActive = false, Action onPress = null, Action onRelease = null, Action onHover = null, Action onHoverEnd = null)
+        public ButtonComponent(string spriteImageUnpressedPath = "", string spriteImagePressedPath = "", string spriteImageHoverPath = "", bool toggleModeActive = false, Action<GameObject> onPress = null, Action<GameObject> onRelease = null, Action<GameObject> onHover = null, Action<GameObject> onHoverEnd = null)
         {
             if (spriteImageUnpressedPath != "")
             {
@@ -60,7 +60,7 @@ namespace SequoiaEngine
             this.OnRelease = onRelease;
         }
 
-        public ButtonComponent(Texture2D spriteImageUnpressed = null, Texture2D spriteImagePressed = null, Texture2D spriteImageHover = null, bool toggleModeActive = false, Action onPress = null, Action onRelease = null, Action onHover = null, Action onHoverEnd = null)
+        public ButtonComponent(Texture2D spriteImageUnpressed = null, Texture2D spriteImagePressed = null, Texture2D spriteImageHover = null, bool toggleModeActive = false, Action<GameObject> onPress = null, Action<GameObject> onRelease = null, Action<GameObject> onHover = null, Action<GameObject> onHoverEnd = null)
         {
             SpriteImageUnpressed = spriteImageUnpressed;
             SpriteImagePressed = spriteImagePressed;

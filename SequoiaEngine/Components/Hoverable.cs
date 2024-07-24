@@ -8,13 +8,13 @@ namespace SequoiaEngine
 {
     public class Hoverable : Component
     {
-        public Hoverable(Action onHoverStart, Action onHoverEnd) 
+        public Hoverable(Action<GameObject> onHoverStart, Action<GameObject> onHoverEnd) 
         {
             this.OnHoverStart = onHoverStart; 
             this.OnHoverEnd = onHoverEnd;
         }
 
-        public Action OnHoverStart;
-        public Action OnHoverEnd;
+        public Action<GameObject> OnHoverStart;
+        public Action<GameObject> OnHoverEnd;
     }
 }

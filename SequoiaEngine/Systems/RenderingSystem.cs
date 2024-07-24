@@ -37,7 +37,7 @@ namespace SequoiaEngine
                 RenderedComponent renderedComponent = gameObjects[id].GetComponent<RenderedComponent>();
                 Transform renderedComponentTransform = gameObjects[id].GetComponent<Transform>();
                 Vector2 renderPosition = gameObjects[id].GetComponent<Transform>().position;
-                Vector2 intRenderPosition = new Vector2((int)renderPosition.X, (int)renderPosition.Y);
+                Vector2 intRenderPosition = new Vector2(renderPosition.X, renderPosition.Y);
                 if (renderedComponentTransform.IsHUD != isDrawingHud) continue;
 
               

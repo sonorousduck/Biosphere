@@ -20,7 +20,7 @@ namespace SequoiaEngine
         public Color SpriteColor = Color.White;
         public AnchorLocation AnchorLocation;
         public ScaleSize Scale;
-        public Action OnButtonPress;
+        public Action<GameObject> OnButtonPress;
 
 
         public Texture2D ButtonClosedTexture;
@@ -62,7 +62,7 @@ namespace SequoiaEngine
 
             Setup();
 
-            OnButtonPress = () =>
+            OnButtonPress = (GameObject) =>
             {
                 if (!IsDrawerOpen)
                 {

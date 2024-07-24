@@ -62,7 +62,7 @@ namespace Biosphere
 
             base.Initialize();
 
-            screenManager.SetNextScreen(ScreenEnum.MainMenu);
+            screenManager.SetNextScreen(ScreenEnum.Test);
         }
 
         private void OnWindowResize(object sender, EventArgs e)

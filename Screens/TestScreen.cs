@@ -153,6 +153,27 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/UI/SlowTimeButton", "slowTimeButton");
             ResourceManager.Load<Texture2D>("Sprites/UI/SlowTimeButtonHover", "slowTimeButton_hover");
             ResourceManager.Load<Texture2D>("Sprites/UI/SlowTimeButtonPressed", "slowTimeButton_pressed");
+            
+            ResourceManager.Load<Texture2D>("Sprites/UI/DoubleSlow", "doubleSlow");
+            ResourceManager.Load<Texture2D>("Sprites/UI/DoubleSlowHover", "doubleSlow_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/DoubleSlowPressed", "doubleSlow_pressed");
+
+            ResourceManager.Load<Texture2D>("Sprites/UI/Slow", "slow");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SlowHover", "slow_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/SlowPressed", "slow_pressed");
+
+            ResourceManager.Load<Texture2D>("Sprites/UI/Play", "play");
+            ResourceManager.Load<Texture2D>("Sprites/UI/PlayHover", "play_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/PlayPressed", "play_pressed");
+
+            ResourceManager.Load<Texture2D>("Sprites/UI/Fast", "fast");
+            ResourceManager.Load<Texture2D>("Sprites/UI/FastHover", "fast_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/FastPressed", "fast_pressed");
+
+            ResourceManager.Load<Texture2D>("Sprites/UI/DoubleFast", "doubleFast");
+            ResourceManager.Load<Texture2D>("Sprites/UI/DoubleFastHover", "doubleFast_hover");
+            ResourceManager.Load<Texture2D>("Sprites/UI/DoubleFastPressed", "doubleFast_pressed");
+
 
             ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButton", "speedTimeButton");
             ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButtonHover", "speedTimeButton_hover");
@@ -161,7 +182,7 @@ namespace Biosphere
             ResourceManager.Load<BitmapFont>("Fonts/Default_Pixel_18", "default_pixel_18");
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
-            renderingSystem.debugMode = true;
+            renderingSystem.debugMode = false;
             fontRenderingSystem = new FontRenderingSystem(systemManager, camera);
 
             //lightRenderer = new LightRenderingSystem(systemManager, camera, graphicsDevice);
@@ -260,7 +281,7 @@ namespace Biosphere
 
             systemManager.Add(cursor);
 
-            Action onButtonPress = () =>
+            Action<GameObject> onButtonPress = (GameObject button) =>
             {
                 Debug.WriteLine("Pressed Button!");
             };

@@ -32,15 +32,15 @@ namespace SequoiaEngine
             float rotation, 
             Vector2 size, 
             Texture2D backgroundTexture, 
-            Texture2D pressedBackground = null, 
             Texture2D hoverBackground = null, 
+            Texture2D pressedBackground = null, 
             AnchorLocation anchorLocation = AnchorLocation.None, 
             ScaleSize scale = ScaleSize.None,
             bool toggleModeActive = false,
-            Action onPress = null,
-            Action onRelease = null,
-            Action onHover = null,
-            Action onHoverEnd = null,
+            Action<GameObject> onPress = null,
+            Action<GameObject> onHover = null,
+            Action<GameObject> onRelease = null,
+            Action<GameObject> onHoverEnd = null,
             GameObject parent = null,
             string tag = ""
             )
@@ -56,12 +56,12 @@ namespace SequoiaEngine
             {
                 if (onHover == null)
                 {
-                    onHover = () =>
+                    onHover = (GameObject go) =>
                     {
                         GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageHover;
                     };
 
-                    onHoverEnd = () =>
+                    onHoverEnd = (GameObject go) =>
                     {
                         GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageUnpressed;
                     };
@@ -85,10 +85,10 @@ namespace SequoiaEngine
             AnchorLocation anchorLocation = AnchorLocation.None, 
             ScaleSize scale = ScaleSize.None,
             bool toggleModeActive = false,
-            Action onPress = null,
-            Action onRelease = null,
-            Action onHover = null,
-            Action onHoverEnd = null,
+            Action<GameObject> onPress = null,
+            Action<GameObject> onRelease = null,
+            Action<GameObject> onHover = null,
+            Action<GameObject> onHoverEnd = null,
             GameObject parent = null,
             string tag = ""
             )
@@ -109,12 +109,12 @@ namespace SequoiaEngine
 
                 if (onHover == null)
                 {
-                    onHover = () =>
+                    onHover = (GameObject) =>
                     {
                         GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageHover;
                     };
 
-                    onHoverEnd = () =>
+                    onHoverEnd = (GameObject) =>
                     {
                         GameObject.GetComponent<Sprite>().sprite = GameObject.GetComponent<ButtonComponent>().SpriteImageUnpressed;
                     };
@@ -130,7 +130,7 @@ namespace SequoiaEngine
         }
 
 
-        private void Setup(bool toggleModeActive, Action onPress, Action onRelease, Action onHover, Action onHoverEnd)
+        private void Setup(bool toggleModeActive, Action<GameObject> onPress, Action<GameObject> onRelease, Action<GameObject> onHover, Action<GameObject> onHoverEnd)
         {
             float spriteDrawLocationModification = 1.0f;
 
