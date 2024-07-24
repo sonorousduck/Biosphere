@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Screens.Transitions;
 using SequoiaEngine;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,6 @@ namespace Biosphere
             inputManager = new();
             inputConfig = new();
             gameManager = new(_graphics, Window, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-            GameManager.Instance.Initialize(GraphicsDevice);
 
             screenManager = new();
 
@@ -55,13 +55,14 @@ namespace Biosphere
 
             screenManager.Screens.Add(ScreenEnum.Test, new TestScreen(this, ScreenEnum.Test));
             screenManager.Screens.Add(ScreenEnum.MainMenu, new MainMenuScreen(this, ScreenEnum.MainMenu));
-            screenManager.SetCurrentScreen(ScreenEnum.Test);
 
             Mouse.SetCursor(MouseCursor.FromTexture2D(ResourceManager.Get<Texture2D>("cursor"), 0, 0));
+            GameManager.Instance.Initialize(GraphicsDevice);
 
 
             base.Initialize();
 
+            screenManager.SetNextScreen(ScreenEnum.Test);
         }
 
         private void OnWindowResize(object sender, EventArgs e)
@@ -89,19 +90,17 @@ namespace Biosphere
 
         protected override void Update(GameTime gameTime)
         {
-            screenManager.PreUpdate();
-
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.D1))
             {
-                screenManager.SetNextScreen(ScreenEnum.MainMenu);
+                screenManager.SetNextScreen(ScreenEnum.MainMenu, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.D2)) 
             {
-                screenManager.SetNextScreen(ScreenEnum.Test);
+                screenManager.SetNextScreen(ScreenEnum.Test, new FadeTransition(GameManager.Instance.GraphicsDevice, Color.Black, 1));
             }
 
             gameManager.Update(gameTime);

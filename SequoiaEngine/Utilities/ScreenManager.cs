@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Screens.Transitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +17,49 @@ namespace SequoiaEngine
         public ScreenEnum NextScreen { get; private set; }
         public ScreenEnum CurrentScreenEnum { get; private set; }
         public bool NewScreenFocused { get; private set; }
+
+        public bool IsLeavingScreen { get; private set; }
+        public bool IsStartingScreen { get; private set; }
+
         public Dictionary<ScreenEnum, Screen> Screens { get; private set; } = new Dictionary<ScreenEnum, Screen>();
-
-        public RenderTarget2D CurrentScreenRenderTarget { get; private set; }
-        public RenderTarget2D NextScreenRenderTarget { get; private set; }
-
         public SpriteBatch SpriteBatch { get; private set; }
+
+        private Transition activeTransition;
 
         public ScreenManager()
         {
             Instance = this;
-            CurrentScreenRenderTarget = new RenderTarget2D(GameManager.Instance.GraphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, GameManager.Instance.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            NextScreenRenderTarget = new RenderTarget2D(GameManager.Instance.GraphicsDevice, 640, 360, false, SurfaceFormat.Color, DepthFormat.None, GameManager.Instance.GraphicsDevice.PresentationParameters.MultiSampleCount, RenderTargetUsage.DiscardContents);
-            SpriteBatch = new(GameManager.Instance.GraphicsDevice);
         }
 
-        public void SetNextScreen(ScreenEnum screen)
+        public void SetNextScreen(ScreenEnum screen, Transition transition = null)
         {
             NextScreen = screen;
+
+            if (activeTransition == null && transition != null)
+            {
+                CurrentScreen.OnScreenDefocus();
+                
+                activeTransition = transition;
+                activeTransition.StateChanged += delegate
+                {
+                    SetCurrentScreen(screen);
+                    IsLeavingScreen = false;
+                };
+                activeTransition.Completed += delegate
+                {
+                    activeTransition.Dispose();
+                    activeTransition = null;
+
+                    CurrentScreen.Start();
+                    CurrentScreen.OnScreenFocus();
+                };
+            }
+            else if (transition == null)
+            {
+                SetCurrentScreen(screen);
+                CurrentScreen.Start();
+                CurrentScreen.OnScreenFocus();
+            }
         }
 
         public void SetCurrentScreen(ScreenEnum newScreen = ScreenEnum.None)
@@ -56,42 +82,36 @@ namespace SequoiaEngine
 
         public void Update(GameTime gameTime)
         {
-            if (NewScreenFocused)
+
+            if (activeTransition != null)
             {
-                CurrentScreen.Start();
-                CurrentScreen.OnScreenFocus();
-                NewScreenFocused = false;
+                activeTransition.Update(gameTime);
             }
 
             CurrentScreen.Update(gameTime);
-
-            if (CurrentScreenEnum != NextScreen)
-            {
-                CurrentScreen.OnScreenDefocus();
-                NewScreenFocused = true;
-            }
+            
         }
 
         public void Draw(GameTime gameTime)
         {
-            GameManager.Instance.GraphicsDevice.SetRenderTarget(CurrentScreenRenderTarget);
-            GameManager.Instance.GraphicsDevice.Clear(Color.Transparent);
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate);
+
 
             CurrentScreen.Draw(gameTime);
 
-            SpriteBatch.End();
-
+            if (activeTransition != null)
+            {
+                activeTransition.Draw(gameTime);
+            }
         }
 
 
         public void PreUpdate()
         {
-            if (CurrentScreenEnum != NextScreen)
+/*            if (CurrentScreenEnum != NextScreen)
             {
                 SetCurrentScreen();
-            }
+            }*/
         }
 
     }

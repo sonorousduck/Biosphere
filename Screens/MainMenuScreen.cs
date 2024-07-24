@@ -26,7 +26,8 @@ namespace Biosphere
 
         private GameObject camera;
 
-        public MainMenuScreen(Game game, ScreenEnum screenEnum) : base(game, screenEnum) { }
+        public MainMenuScreen(Game game, ScreenEnum screenEnum) : base(game, screenEnum) 
+        {        }
 
 
         public override void Initialize(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphics, GameWindow window)

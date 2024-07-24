@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Screens.Transitions;
 
 
 namespace SequoiaEngine
@@ -20,7 +21,6 @@ namespace SequoiaEngine
         protected GraphicsDevice graphicsDevice;
         protected GameWindow window;
         protected ContentManager content;
-
 
         /// <summary>
         /// This MUST be invoked with a base() call.
@@ -62,6 +62,8 @@ namespace SequoiaEngine
         /// <summary>
         /// Sets up all entities for the given screen. This is called AFTER the onLoad
         /// </summary>
+        /// 
+
         public abstract void SetupGameObjects();
 
 
