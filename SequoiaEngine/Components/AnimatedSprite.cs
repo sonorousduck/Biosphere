@@ -10,7 +10,24 @@ namespace SequoiaEngine
     public class AnimatedSprite : RenderedComponent
     {
         // The texture from which to take the frame data
-        public Texture2D spriteSheet { get; set; }
+
+        public Dictionary<string, SpriteAnimation> Animations { get; private set; } = new();
+
+        /// <summary>
+        /// Create an animation that you can then add frames to inside the spritesheet
+        /// </summary>
+        /// <param name="animationName">Name that you can get and use for switching to (Like .play("run")</param>
+        /// <returns></returns>
+        public SpriteAnimation CreateAnimation(string animationName)
+        {
+            Animations.Add(animationName, new SpriteAnimation());
+
+            return Animations[animationName];
+        }
+
+        
+
+       /* public Texture2D spriteSheet { get; set; }
         public int currentFrame { get; set; }
         public int[] frameTiming { get; set; }
         public TimeSpan currentTime { get; set; }
@@ -22,9 +39,9 @@ namespace SequoiaEngine
         public bool completedPlay { get; set; }
         public Dictionary<int, string> callbacks { get; set; }
         public Queue<string> callbackToRun { get; set; }
-        public float renderDepth { get; set; }
+        public float renderDepth { get; set; }*/
 
-        public AnimatedSprite(Texture2D spriteSheet, int[] frameTiming, Vector2 singleFrameSize, int layerDepth = 0, bool isHUD = false, int startFrame = 0, int endFrame = 0, bool playOnce = false, Dictionary<int, string> callbacks = null, float renderDepth = 0f)
+/*        public AnimatedSprite(Texture2D spriteSheet, int[] frameTiming, Vector2 singleFrameSize, int layerDepth = 0, bool isHUD = false, int startFrame = 0, int endFrame = 0, bool playOnce = false, Dictionary<int, string> callbacks = null, float renderDepth = 0f)
         {
             this.spriteSheet = spriteSheet;
             this.currentFrame = startFrame;
@@ -39,6 +56,6 @@ namespace SequoiaEngine
             this.callbacks = callbacks;
             this.callbackToRun = new Queue<string>();
             this.renderDepth = renderDepth;
-        }
+        }*/
     }
 }

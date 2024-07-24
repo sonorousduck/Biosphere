@@ -15,6 +15,8 @@ namespace Biosphere
             gameObject.Add(new RectangleCollider(size * new Vector2(2, 2), false));
             gameObject.Add(new CursorScript(gameObject));
 
+            gameObject.Add(new AudioSource());
+
 
 
             MouseInput mouseInput = new MouseInput();

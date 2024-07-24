@@ -37,7 +37,7 @@ namespace SequoiaEngine
                 RenderedComponent renderedComponent = gameObjects[id].GetComponent<RenderedComponent>();
                 Transform renderedComponentTransform = gameObjects[id].GetComponent<Transform>();
                 Vector2 renderPosition = gameObjects[id].GetComponent<Transform>().position;
-                Vector2 intRenderPosition = new Vector2(renderPosition.X, renderPosition.Y);
+                Vector2 intRenderPosition = new Vector2(renderPosition.X + 0.25f, renderPosition.Y + 0.25f);
                 if (renderedComponentTransform.IsHUD != isDrawingHud) continue;
 
               
@@ -46,7 +46,13 @@ namespace SequoiaEngine
                 {
                     AnimatedSprite animatedSprite = gameObjects[id].GetComponent<AnimatedSprite>();
                     Transform transform = gameObjects[id].GetComponent<Transform>();
-                    int currentX = (int)(animatedSprite.currentFrame * animatedSprite.singleFrameSize.X);
+
+
+
+
+
+
+                    /*int currentX = (int)(animatedSprite.currentFrame * animatedSprite.singleFrameSize.X);
                     spriteBatch.Draw(animatedSprite.spriteSheet,
                         intRenderPosition, 
                         new Rectangle(currentX, 0, 
@@ -57,7 +63,7 @@ namespace SequoiaEngine
                         transform.scale, 
                         SpriteEffects.None, 
                         gameObjects[id].GetComponent<AnimatedSprite>().renderDepth
-                        );
+                        );*/
                 }
                 if (gameObjects[id].ContainsComponent<Sprite>())
                 {
@@ -72,7 +78,6 @@ namespace SequoiaEngine
                         SpriteEffects.None, 
                         gameObjects[id].GetComponent<Sprite>().renderDepth);
                 }
-
                 /*if (gameObjects[id].ContainsComponent<MultiAnimatedSprite>())
                 {
                     MultiAnimatedSprite multiAnimatedSprite = gameObjects[id].GetComponent<MultiAnimatedSprite>();

@@ -14,6 +14,7 @@ using Biosphere.Prefabs.UI;
 using MonoGame.Extended.BitmapFonts;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
+using Microsoft.Xna.Framework.Audio;
 
 
 
@@ -31,6 +32,8 @@ namespace Biosphere
         private ScriptSystem scriptSystem;
         private AnimatedSystem animatedSystem;
         private TimeManager timeManager;
+
+        private AudioSystem audioSystem;
 
         private TiledRenderingSystem tiledRenderingSystem;
 
@@ -64,7 +67,7 @@ namespace Biosphere
             particleSystem = new ParticleSystem(systemManager);
             particleRenderer = new ParticleRenderingSystem(systemManager);
             animatedSystem = new AnimatedSystem(systemManager);
-
+            audioSystem = new AudioSystem(systemManager);
             tiledRenderingSystem = new TiledRenderingSystem(systemManager);
 
             animationSystem = new SpritesheetAnimationSystem(systemManager);
@@ -179,7 +182,17 @@ namespace Biosphere
             ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButtonHover", "speedTimeButton_hover");
             ResourceManager.Load<Texture2D>("Sprites/UI/SpeedTimeButtonPressed", "speedTimeButton_pressed");
 
+            ResourceManager.Load<Texture2D>("Spritesheets/Animals/BunnySpritesheet", "bunny_spritesheet");
+
+
+
+
             ResourceManager.Load<BitmapFont>("Fonts/Default_Pixel_18", "default_pixel_18");
+
+
+            ResourceManager.Load<SoundEffect>("SoundEffects/UI/MouseClick", "mouseClick");
+            ResourceManager.Load<SoundEffect>("SoundEffects/UI/ButtonClick", "buttonClick");
+
 
             renderingSystem = new RenderingSystem(systemManager, window.ClientBounds.Height, camera, new Vector2(window.ClientBounds.Width, window.ClientBounds.Height));
             renderingSystem.debugMode = false;
@@ -318,6 +331,9 @@ namespace Biosphere
 
             systemManager.Add(tiledMap);
 
+
+
+            TextureAtlas atlas = TextureAtlas.Create("Atlas/Bunny", ResourceManager.Get<Texture2D>("bunny_spritesheet"), 48, 48);
 
 
 

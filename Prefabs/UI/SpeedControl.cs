@@ -13,7 +13,7 @@ namespace Biosphere
         {
             GameObject parentObject = new GameObject(new Transform(new Vector2(GameManager.Instance.RenderWidth - 200, 20), 0f, new Vector2(186, 37), isHUD: true));
 
-            Sprite testLocationSprite = new Sprite(ResourceManager.Get<Texture2D>("default"), Color.Blue);
+            Sprite testLocationSprite = new Sprite(ResourceManager.Get<Texture2D>("default"), Color.Transparent);
 
             float correctX = 0f;
 

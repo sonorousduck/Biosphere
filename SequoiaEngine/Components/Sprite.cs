@@ -4,6 +4,7 @@ using System.Text;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Graphics;
 
 namespace SequoiaEngine
 {
@@ -14,6 +15,9 @@ namespace SequoiaEngine
         public Vector2 center;
         public Vector2 size;
         public float renderDepth;
+
+        public Texture2DRegion region;
+
 
         /// <summary>
         /// Creates a Sprite
@@ -30,6 +34,14 @@ namespace SequoiaEngine
             this.renderDepth = renderDepth;
             this.size = spriteSize;
         }
+
+        public Sprite(Texture2DRegion region)
+        {
+            this.color = Color.White;
+            this.sprite = region.Texture;
+            this.region = region;
+        }
+
 
         /// <summary>
         /// Computes the center automatically for you if you use this based on the sprite width and height

@@ -152,7 +152,18 @@ namespace Biosphere
             text.Add(startButtonText);
             text.Add(buttonAnchor);
 
-            
+
+            GameObject quitText = new GameObject(new Transform(isHUD: true), parent: button2.GameObject);
+            Text quitButtonText = new Text("Quit Game", Color.White, Color.Transparent, ResourceManager.Get<BitmapFont>("default_pixel_18"));
+            Anchor quitButtonAnchor = new Anchor(AnchorLocation.MiddleMiddle);
+
+            SizeF quitTest = startButtonText.bitmapFont.MeasureString(quitButtonText.text);
+            quitText.GetComponent<Transform>().position -= new Vector2(quitTest.Width, quitTest.Height) / 2f;
+            quitText.GetComponent<Transform>().position += quitButtonAnchor.GetAnchorPoint(quitText) + new Vector2(0, 0f);
+
+            quitText.Add(quitButtonText);
+            quitText.Add(quitButtonAnchor);
+
 
             systemManager.Add(canvas.GameObject);
             systemManager.Add(canvas1.GameObject);
@@ -160,6 +171,8 @@ namespace Biosphere
             systemManager.Add(button1.GameObject);
             systemManager.Add(button2.GameObject);
             systemManager.Add(text);
+            systemManager.Add(quitText);
+
         }
     }
 }

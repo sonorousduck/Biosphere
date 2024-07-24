@@ -13,6 +13,7 @@ namespace Biosphere
         private Transform transform;
         private Sprite sprite;
         private MouseInput mouse;
+        private AudioSource audioSource;
 
         private List<GameObject> collidingWithGame;
         private List<GameObject> collidingWithUI;
@@ -31,9 +32,9 @@ namespace Biosphere
             transform = gameObject.GetComponent<Transform>();
             sprite = gameObject.GetComponent<Sprite>();
             mouse = gameObject.GetComponent<MouseInput>();
+            audioSource = gameObject.GetComponent<AudioSource>();
             collidingWithGame = new List<GameObject>();
             collidingWithUI = new List<GameObject>();
-
         }
 
 
@@ -64,7 +65,7 @@ namespace Biosphere
 
                     if (other.TryGetComponent(out Hoverable hoverable))
                     {
-                        hoverable.OnHoverStart?.Invoke(this.gameObject);
+                        hoverable.OnHoverStart?.Invoke(other);
                     }
 
                 }
@@ -92,7 +93,7 @@ namespace Biosphere
 
                     if (other.TryGetComponent(out Hoverable hoverable))
                     {
-                        hoverable.OnHoverEnd?.Invoke(this.gameObject);
+                        hoverable.OnHoverEnd?.Invoke(other);
                     }
                 }
             }
@@ -106,7 +107,12 @@ namespace Biosphere
                 if (collidingWithUI[0].TryGetComponent(out ButtonComponent button))
                 {
                     button.OnPress?.Invoke(collidingWithUI[0]);
+                    audioSource.soundEffectsQueue.Enqueue("buttonClick");
                 }
+            }
+            else
+            {
+                audioSource.soundEffectsQueue.Enqueue("mouseClick");
             }
         }
 

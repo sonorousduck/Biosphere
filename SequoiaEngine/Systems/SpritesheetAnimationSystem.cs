@@ -14,16 +14,16 @@ namespace SequoiaEngine
             foreach (uint id in gameObjects.Keys)
             {
                 AnimatedSprite animatedSprite = gameObjects[id].GetComponent<AnimatedSprite>();
-                animatedSprite.currentTime += gameTime.ElapsedGameTime;
+                /*animatedSprite.currentTime += gameTime.ElapsedGameTime;
 
                 while (animatedSprite.currentTime.Milliseconds > animatedSprite.frameTiming[animatedSprite.currentFrame])
                 {
                     animatedSprite.currentTime = animatedSprite.currentTime.Subtract(TimeSpan.FromMilliseconds(animatedSprite.frameTiming[animatedSprite.currentFrame]));
 
-                    /*                    if (animatedSprite.playOnce && animatedSprite.currentFrame == animatedSprite.endFrame)
+                    *//*                    if (animatedSprite.playOnce && animatedSprite.currentFrame == animatedSprite.endFrame)
                                         {
                                             animatedSprite.completedPlay = true;
-                                        }*/
+                                        }*//*
 
                     if (animatedSprite.currentFrame != animatedSprite.endFrame || !animatedSprite.playOnce)
                     {
@@ -54,7 +54,7 @@ namespace SequoiaEngine
                     else if (animatedSprite.endFrame == 0)
                     {
                         animatedSprite.currentFrame %= animatedSprite.frameTiming.Length;
-                    }
+                    }*/
                     /*                    else if (animatedSprite.playOnce)
                                         {
                                             if (animatedSprite.currentFrame == animatedSprite.endFrame)
@@ -63,7 +63,7 @@ namespace SequoiaEngine
                                             }
                                         }*/
 
-                }
+                //}
             }
         }
     }
