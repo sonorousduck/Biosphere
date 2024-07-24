@@ -34,7 +34,10 @@ namespace SequoiaEngine
 
         public override void Start()
         {
-            renderer = new TiledMapRenderer(GameManager.Instance.GraphicsDevice);
+            if (renderer == null)
+            {
+                renderer = new TiledMapRenderer(GameManager.Instance.GraphicsDevice);
+            }
         }
 
 

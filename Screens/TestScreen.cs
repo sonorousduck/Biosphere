@@ -173,7 +173,7 @@ namespace Biosphere
 
         public override void OnScreenDefocus()
         {
-            Debug.WriteLine("Default Screen was unloaded");
+            Debug.WriteLine("Test Screen was unloaded");
         }
 
         public override void OnScreenFocus()
