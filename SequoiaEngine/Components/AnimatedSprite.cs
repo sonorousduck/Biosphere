@@ -7,7 +7,7 @@ using SequoiaEngine;
 
 namespace SequoiaEngine
 {
-    public class AnimatedSprite : RenderedComponent
+    public class AnimatedSprite
     {
         // The texture from which to take the frame data
 

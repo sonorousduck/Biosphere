@@ -5,7 +5,7 @@ namespace SequoiaEngine
 {
     public class SpritesheetAnimationSystem : System
     {
-        public SpritesheetAnimationSystem(SystemManager systemManager) : base(systemManager, typeof(AnimatedSprite))
+        public SpritesheetAnimationSystem(SystemManager systemManager) : base(systemManager, typeof(AnimationController))
         {
         }
 
@@ -13,7 +13,19 @@ namespace SequoiaEngine
         {
             foreach (uint id in gameObjects.Keys)
             {
-                AnimatedSprite animatedSprite = gameObjects[id].GetComponent<AnimatedSprite>();
+                if (!gameObjects[id].IsEnabled()) continue;
+
+                AnimationController animatedSprite = gameObjects[id].GetComponent<AnimationController>();
+
+                
+
+
+
+
+
+
+
+
                 /*animatedSprite.currentTime += gameTime.ElapsedGameTime;
 
                 while (animatedSprite.currentTime.Milliseconds > animatedSprite.frameTiming[animatedSprite.currentFrame])

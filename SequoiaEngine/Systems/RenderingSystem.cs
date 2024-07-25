@@ -42,9 +42,9 @@ namespace SequoiaEngine
 
               
 
-                if (gameObjects[id].ContainsComponent<AnimatedSprite>())
+                if (gameObjects[id].ContainsComponent<AnimationController>())
                 {
-                    AnimatedSprite animatedSprite = gameObjects[id].GetComponent<AnimatedSprite>();
+                    AnimationController animatedSprite = gameObjects[id].GetComponent<AnimationController>();
                     Transform transform = gameObjects[id].GetComponent<Transform>();
 
 
