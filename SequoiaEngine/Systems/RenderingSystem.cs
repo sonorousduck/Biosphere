@@ -48,6 +48,10 @@ namespace SequoiaEngine
                     Transform transform = gameObjects[id].GetComponent<Transform>();
 
 
+                    foreach (AnimatedSprite animation in animatedSprite.AnimationTree.Tree[animatedSprite.CurrentNode].Animations)
+                    {
+                        
+                    }
 
 
 
