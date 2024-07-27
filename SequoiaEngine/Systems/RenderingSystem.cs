@@ -50,6 +50,23 @@ namespace SequoiaEngine
 
                     foreach (AnimatedSprite animation in animatedSprite.AnimationTree.Tree[animatedSprite.CurrentNode].Animations)
                     {
+                        if (animation.CurrentAnimation != "none")
+                        {
+                            SpriteAnimation spriteAnimation = animation.Animations[animation.CurrentAnimation];
+                            AnimationFrame currentFrame = spriteAnimation.Frames[animation.CurrentFrame];
+
+                            spriteBatch.Draw(
+                                animation.TextureAtlas.Texture,
+                                intRenderPosition,
+                                animation.TextureAtlas.GetRegion(currentFrame.FrameIndex),
+                                Color.White,
+                                transform.rotation,
+                                animation.TextureAtlas.SpriteSize / 2,
+                                transform.scale,
+                                SpriteEffects.None,
+                                animatedSprite.RenderDepth
+                        );
+                        }
                         
                     }
 

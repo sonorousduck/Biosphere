@@ -323,20 +323,52 @@ namespace Biosphere
             systemManager.Add(parentObject);
 
 
-            GameObject tiledMap = new();
+            //GameObject tiledMap = new();
 
-            TiledMapComponent tiledMapComponent = new(Content.Load<TiledMap>("Maps/Test"));
+            //TiledMapComponent tiledMapComponent = new(Content.Load<TiledMap>("Maps/Test"));
 
-            tiledMap.Add(tiledMapComponent);
+            //tiledMap.Add(tiledMapComponent);
 
-            systemManager.Add(tiledMap);
+            //systemManager.Add(tiledMap);
 
 
+
+
+            GameObject go = new GameObject(new Transform(new Vector2(300, 200), 0, Vector2.One));
 
             TextureAtlas atlas = TextureAtlas.Create("Atlas/Bunny", ResourceManager.Get<Texture2D>("bunny_spritesheet"), 48, 48);
+            SequoiaEngine.AnimatedSprite animatedSprite = new SequoiaEngine.AnimatedSprite(atlas);
+            animatedSprite.CreateAnimation("walk");
+            animatedSprite.Animations["walk"].AddFrame(0, 1f);
+            animatedSprite.Animations["walk"].AddFrame(1, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(2, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(3, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(4, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(5, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(6, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(7, 1.1f);
+
+            animatedSprite.CreateAnimation("idle");
+            animatedSprite.Animations["idle"].AddFrame(8, 1.1f);
+            animatedSprite.Animations["idle"].AddFrame(9, 1.1f);
+            animatedSprite.Animations["idle"].AddFrame(10, 1.1f);
+            animatedSprite.Animations["idle"].AddFrame(11, 1.1f);
 
 
+            AnimationTree animationTree = new AnimationTree();
 
+            animatedSprite.Play("walk");
+            Node node = new Node(new List<Link>(), new List<SequoiaEngine.AnimatedSprite> { animatedSprite });
+
+            animationTree.AddNode(node);
+
+
+            AnimationController animationController = new AnimationController(animationTree, 1.0f);
+
+
+            go.Add(animationController);
+
+            systemManager.Add(go);
             //GameObject test = new(new Transform(new Vector2(ResourceManager.Get<Texture2D>("mountainsStoreTile").Width / 2f, ResourceManager.Get<Texture2D>("mountainsStoreTile").Height / 2f), 0f, Vector2.One));
 
             //test.Add(new Sprite(ResourceManager.Get<Texture2D>("mountainsStoreTile"), Color.White, 1.0f, true));

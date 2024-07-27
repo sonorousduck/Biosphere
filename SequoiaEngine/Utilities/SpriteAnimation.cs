@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Biosphere;
+using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,12 +26,23 @@ namespace SequoiaEngine
 
     public class SpriteAnimation
     {
-        public List<AnimationFrame> Frames { get; private set; }
+        public List<AnimationFrame> Frames { get; private set; } = new();
 
         /// <summary>
         /// Controls whether this animation should only play a single time
         /// </summary>
         public bool PlayOnce = true;
+
+        /// <summary>
+        /// Loops forever unless something is triggered to leave this animation
+        /// </summary>
+        public bool PlayForever = false;
+
+        /// <summary>
+        /// If Play Once or Play forever is true, this is ignored
+        /// </summary>
+        public int NumberTimesToRepeat = 1;
+
 
         /// <summary>
         /// Specifies if the animation has completed
@@ -50,14 +63,53 @@ namespace SequoiaEngine
         /// </summary>
         public float RenderDepth;
 
+        public int CurrentFrame;
+        public float CurrentElapsedTime;
+
 
         public SpriteAnimation(Dictionary<int, Action<GameObject>> callbacks = null, bool playOnce = false, float renderDepth = 0f)
         {
             this.Callbacks = callbacks ?? new();
             this.PlayOnce = playOnce;
             this.RenderDepth = renderDepth;
+            CurrentFrame = 0;
+            CurrentElapsedTime = 0;
         }
 
+        public void ResetAnimation()
+        {
+            CurrentFrame = 0;
+            CurrentElapsedTime = 0;
+        }
+
+        public void UpdateElapsedTime(GameTime gameTime, GameObject go)
+        {
+            CurrentElapsedTime += GameManager.Instance.ElapsedMilliseconds;
+
+            while (CurrentElapsedTime >= Frames[CurrentFrame].Duration)
+            {
+                CurrentElapsedTime -= GameManager.Instance.ElapsedMilliseconds;
+                IncrementSprite(go);
+            }
+
+        }
+
+        private void IncrementSprite(GameObject go)
+        {
+            if (CurrentFrame + 1 < Frames.Count)
+            {
+                CurrentFrame++;
+                // Make sure the callbacks are called for every frame, even it happens to skip over it
+                if (Callbacks.TryGetValue(CurrentFrame, out Action<GameObject> callback))
+                {
+                    callback?.Invoke(go);
+                }
+            }
+            else if ((!PlayOnce && NumberTimesToRepeat > 0) || PlayForever)
+            {
+                CurrentFrame = 0;
+            }
+        }
 
         public void AddFrame(int frameIndex, float duration, string name = "")
         {

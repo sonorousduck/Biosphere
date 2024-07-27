@@ -40,7 +40,7 @@ namespace Biosphere
 
         protected override void Update(GameTime gameTime)
         {
-            ModifiedDeltaTime = GameManager.Instance.ElapsedMicroseconds * gameSpeedModifier;
+            ModifiedDeltaTime = GameManager.Instance.ElapsedSeconds * gameSpeedModifier;
             TimeSpan deltaTimeSpan = TimeSpan.FromMilliseconds(ModifiedDeltaTime * baseSpeedModifier * 1000f); // Convert from microseconds to milliseconds
             CurrentDate += deltaTimeSpan;
 

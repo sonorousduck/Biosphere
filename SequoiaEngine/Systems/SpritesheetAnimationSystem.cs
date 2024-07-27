@@ -17,10 +17,25 @@ namespace SequoiaEngine
 
                 AnimationController animatedSprite = gameObjects[id].GetComponent<AnimationController>();
 
-                
+
+                foreach (AnimatedSprite animation in animatedSprite.AnimationTree.Tree[animatedSprite.CurrentNode].Animations)
+                {
+                    animation.UpdateElapsedTime(gameTime, gameObjects[id]);
+                }
 
 
-
+                foreach (Link link in animatedSprite.AnimationTree.Tree[animatedSprite.CurrentNode].Links)
+                {
+                    if (link.ShouldTraverseLink.Invoke())
+                    {
+                        foreach (AnimatedSprite animation in animatedSprite.AnimationTree.Tree[animatedSprite.CurrentNode].Animations)
+                        {
+                            animation.ResetAnimation();
+                        }
+                    }
+                    animatedSprite.CurrentNode = link.ChildNode;
+                    break;
+                }
 
 
 

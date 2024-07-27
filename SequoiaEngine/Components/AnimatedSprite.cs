@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SequoiaEngine;
@@ -12,6 +13,25 @@ namespace SequoiaEngine
         // The texture from which to take the frame data
 
         public Dictionary<string, SpriteAnimation> Animations { get; private set; } = new();
+        public string CurrentAnimation = "none";
+        public TextureAtlas TextureAtlas { get; private set; }
+
+        public int CurrentFrame { get => Animations[CurrentAnimation].CurrentFrame; }
+
+        public AnimatedSprite(TextureAtlas atlas)
+        {
+            this.TextureAtlas = atlas;
+        }
+
+        public void ResetAnimation()
+        {
+            Animations[CurrentAnimation].ResetAnimation();
+        }
+
+        public void UpdateElapsedTime(GameTime gameTime, GameObject go)
+        {
+            Animations[CurrentAnimation].UpdateElapsedTime(gameTime, go);
+        }
 
         /// <summary>
         /// Create an animation that you can then add frames to inside the spritesheet
@@ -23,6 +43,18 @@ namespace SequoiaEngine
             Animations.Add(animationName, new SpriteAnimation());
 
             return Animations[animationName];
+        }
+
+        public void Play(string animationName)
+        {
+            if (!Animations.ContainsKey(animationName))
+            {
+                Debug.WriteLine($"ERROR! {animationName} is not a valid animation!");
+            }
+            else
+            {
+                CurrentAnimation = animationName;
+            }
         }
 
         

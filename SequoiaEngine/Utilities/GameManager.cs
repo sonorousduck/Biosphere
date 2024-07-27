@@ -22,7 +22,8 @@ namespace SequoiaEngine
 
         public GameTime ElapsedTime;
         public float ElapsedMilliseconds;
-        public float ElapsedMicroseconds;
+        public float ElapsedMicroseconds { get => ElapsedMilliseconds * 1000.0f; }
+        public float ElapsedSeconds { get => ElapsedMilliseconds / 1000.0f; }
 
         public int RenderWidth;
         public int RenderHeight;
@@ -85,7 +86,6 @@ namespace SequoiaEngine
         {
             this.ElapsedTime = gameTime;
             this.ElapsedMilliseconds = gameTime.ElapsedGameTime.Milliseconds;
-            this.ElapsedMicroseconds = this.ElapsedMilliseconds / 1000.0f;
         }
 
     }

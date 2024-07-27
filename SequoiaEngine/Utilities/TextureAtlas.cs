@@ -18,6 +18,8 @@ namespace SequoiaEngine
         public string Name { get; private set; }
         public Texture2D Texture { get; private set; }
 
+        public Vector2 SpriteSize;
+
 
         private readonly List<Rectangle> frameRegions = new List<Rectangle>();
 
@@ -58,6 +60,8 @@ namespace SequoiaEngine
             Vector2 correctedMargin = margin ?? Vector2.Zero;
             Vector2 correctedSpacing = spacing ?? Vector2.Zero;
             int numberOfSprites = 0;
+
+            textureAtlas.SpriteSize = new Vector2(regionWidth, regionHeight);
 
             Vector2 startLocation = correctedMargin;
 
