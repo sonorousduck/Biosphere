@@ -339,20 +339,34 @@ namespace Biosphere
             TextureAtlas atlas = TextureAtlas.Create("Atlas/Bunny", ResourceManager.Get<Texture2D>("bunny_spritesheet"), 48, 48);
             SequoiaEngine.AnimatedSprite animatedSprite = new SequoiaEngine.AnimatedSprite(atlas);
             animatedSprite.CreateAnimation("walk");
-            animatedSprite.Animations["walk"].AddFrame(0, 1f);
-            animatedSprite.Animations["walk"].AddFrame(1, 1.1f);
-            animatedSprite.Animations["walk"].AddFrame(2, 1.1f);
-            animatedSprite.Animations["walk"].AddFrame(3, 1.1f);
-            animatedSprite.Animations["walk"].AddFrame(4, 1.1f);
-            animatedSprite.Animations["walk"].AddFrame(5, 1.1f);
-            animatedSprite.Animations["walk"].AddFrame(6, 1.1f);
-            animatedSprite.Animations["walk"].AddFrame(7, 1.1f);
+            animatedSprite.Animations["walk"].AddFrame(0, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(1, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(2, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(3, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(4, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(5, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(6, 0.1f);
+            animatedSprite.Animations["walk"].AddFrame(7, 0.1f);
+            animatedSprite.Animations["walk"].PlayForever = true;
+
+
+
+            animatedSprite.Animations["walk"].Callbacks.Add(7, (go) =>
+            {
+                go.GetComponent<AnimationController>().AnimationTree.Tree[0].Animations[0].Play("idle");
+            });
+
 
             animatedSprite.CreateAnimation("idle");
-            animatedSprite.Animations["idle"].AddFrame(8, 1.1f);
-            animatedSprite.Animations["idle"].AddFrame(9, 1.1f);
-            animatedSprite.Animations["idle"].AddFrame(10, 1.1f);
-            animatedSprite.Animations["idle"].AddFrame(11, 1.1f);
+            animatedSprite.Animations["idle"].AddFrame(8, 0.1f);
+            animatedSprite.Animations["idle"].AddFrame(9, 0.1f);
+            animatedSprite.Animations["idle"].AddFrame(10, 0.1f);
+            animatedSprite.Animations["idle"].AddFrame(11, 0.5f);
+
+            animatedSprite.Animations["idle"].Callbacks.Add(3, (go) =>
+            {
+                go.GetComponent<AnimationController>().AnimationTree.Tree[0].Animations[0].Play("walk");
+            });
 
 
             AnimationTree animationTree = new AnimationTree();

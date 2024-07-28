@@ -33,6 +33,8 @@ namespace SequoiaEngine
                             animation.ResetAnimation();
                         }
                     }
+
+                    
                     animatedSprite.CurrentNode = link.ChildNode;
                     break;
                 }

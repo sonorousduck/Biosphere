@@ -53,6 +53,10 @@ namespace SequoiaEngine
             }
             else
             {
+                if (CurrentAnimation != "none")
+                {
+                    Animations[CurrentAnimation].ResetAnimation();
+                }
                 CurrentAnimation = animationName;
             }
         }

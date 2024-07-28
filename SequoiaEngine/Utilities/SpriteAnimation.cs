@@ -84,11 +84,11 @@ namespace SequoiaEngine
 
         public void UpdateElapsedTime(GameTime gameTime, GameObject go)
         {
-            CurrentElapsedTime += GameManager.Instance.ElapsedMilliseconds;
+            CurrentElapsedTime += GameManager.Instance.ElapsedSeconds;
 
             while (CurrentElapsedTime >= Frames[CurrentFrame].Duration)
             {
-                CurrentElapsedTime -= GameManager.Instance.ElapsedMilliseconds;
+                CurrentElapsedTime -= Frames[CurrentFrame].Duration;
                 IncrementSprite(go);
             }
 
@@ -96,18 +96,20 @@ namespace SequoiaEngine
 
         private void IncrementSprite(GameObject go)
         {
+            // Make sure the callbacks are called for every frame, even it happens to skip over it
+            if (Callbacks.TryGetValue(CurrentFrame, out Action<GameObject> callback))
+            {
+                callback?.Invoke(go);
+            }
+
             if (CurrentFrame + 1 < Frames.Count)
             {
                 CurrentFrame++;
-                // Make sure the callbacks are called for every frame, even it happens to skip over it
-                if (Callbacks.TryGetValue(CurrentFrame, out Action<GameObject> callback))
-                {
-                    callback?.Invoke(go);
-                }
             }
             else if ((!PlayOnce && NumberTimesToRepeat > 0) || PlayForever)
             {
                 CurrentFrame = 0;
+                NumberTimesToRepeat--;
             }
         }
 
