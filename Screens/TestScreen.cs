@@ -369,6 +369,10 @@ namespace Biosphere
             });
 
 
+            // Right now, the animation tree does absolutely nothing. Instead of the AnimatedSprite having an array of Animations with names
+            // that functionality should be taken by the Animation Tree and is linked to the frames.
+            // Then, when we build our links, we can easily go between the "walk" and "idle" animation without a clunky lookup
+
             AnimationTree animationTree = new AnimationTree();
 
             animatedSprite.Play("walk");
